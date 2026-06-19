@@ -70,21 +70,48 @@ export type EventShareBundle = {
 };
 
 /**
- * Forward-compatible record/year-summary kinds (v1 may ship event-only — §13).
- * Kept loose so an early ShareReport never crashes on a future bundle shape.
+ * A single shared record. Reuses the same record/lab/AI projection as the event
+ * path's `records[]` (the server lifts one sanitized ShareRecord into here), so
+ * this renders through the exact same RecordCard component.
  */
+export type RecordShareBundle = {
+  kind: 'record';
+  lang: Lang;
+  patientName: string;
+  patientDetails?: { birthYear?: number; gender?: string };
+  title: string;
+  records: ShareRecord[];
+  ai?: ShareAi;
+};
+
+/**
+ * A whole-family annual recap (YearSummaryScreen). STATS ONLY — counts +
+ * display labels, never ids. Mirrors src/lib/yearSummary.ts's output, projected
+ * server-side to a leak-free shape.
+ */
+export type YearSummaryShareBundle = {
+  kind: 'year_summary';
+  lang: Lang;
+  year: number;
+  patientName?: string;
+  totals: {
+    records: number;
+    events: number;
+    chapters: number;
+    aiAnalyses: number;
+  };
+  busiestMonth?: { month: number; count: number };
+  topCategories: { label: string; count: number }[];
+  byMember: { name: string; count: number }[];
+  spanDays?: number;
+  firstDate?: string;
+  lastDate?: string;
+};
+
 export type ShareBundle =
   | EventShareBundle
-  | {
-      kind: 'record' | 'year_summary';
-      lang: Lang;
-      patientName: string;
-      patientDetails?: { birthYear?: number; gender?: string };
-      // record-shaped payload reuses the same record/lab fields
-      title?: string;
-      records?: ShareRecord[];
-      ai?: ShareAi;
-    };
+  | RecordShareBundle
+  | YearSummaryShareBundle;
 
 const STRINGS = {
   en: {
@@ -111,6 +138,19 @@ const STRINGS = {
     doctor: 'Doctor',
     location: 'Location',
     specialty: 'Specialty',
+    // year-summary
+    yearInHealth: 'Year in health',
+    totalRecords: 'Records',
+    totalEvents: 'Events',
+    totalChapters: 'Chapters',
+    aiAnalyses: 'AI analyses',
+    busiestMonth: 'Busiest month',
+    busiestMonthSub: (n: number) => `${n} record${n === 1 ? '' : 's'}`,
+    topCategories: 'Top categories',
+    byMember: 'By family member',
+    span: 'Activity span',
+    spanValue: (n: number) => `${n} day${n === 1 ? '' : 's'}`,
+    recordsN: (n: number) => `${n} record${n === 1 ? '' : 's'}`,
   },
   he: {
     sharedReport: 'דוח בריאות משותף',
@@ -135,8 +175,37 @@ const STRINGS = {
     doctor: 'רופא/ה',
     location: 'מיקום',
     specialty: 'תחום',
+    // year-summary
+    yearInHealth: 'השנה שלך בבריאות',
+    totalRecords: 'רשומות',
+    totalEvents: 'אירועים',
+    totalChapters: 'פרקים',
+    aiAnalyses: 'ניתוחי AI',
+    busiestMonth: 'החודש העמוס ביותר',
+    busiestMonthSub: (n: number) => `${n} רשומות`,
+    topCategories: 'קטגוריות מובילות',
+    byMember: 'לפי בני המשפחה',
+    span: 'טווח פעילות',
+    spanValue: (n: number) => `${n} ימים`,
+    recordsN: (n: number) => `${n} רשומות`,
   },
 } as const;
+
+const MONTH_NAMES: Record<Lang, string[]> = {
+  en: [
+    '',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ],
+  he: [
+    '',
+    'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+    'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר',
+  ],
+};
+function monthName(month: number, lang: Lang): string {
+  return month >= 1 && month <= 12 ? MONTH_NAMES[lang][month] : '';
+}
 
 function fmtDate(iso: string | undefined, lang: Lang): string {
   if (!iso) return '';
@@ -377,7 +446,221 @@ function AiSummary({ ai, lang }: { ai: ShareAi; lang: Lang }) {
   );
 }
 
+/** Big-number stat tile (mirrors the app's YearSummary StatCard). */
+function StatTile({
+  big,
+  label,
+  accent,
+}: {
+  big: string;
+  label: string;
+  accent: string;
+}) {
+  return (
+    <div
+      className="flex flex-col items-center justify-center rounded-2xl border p-6 text-center"
+      style={{ borderColor: `${accent}40`, backgroundColor: `${accent}14` }}
+    >
+      <span
+        className="font-display text-4xl leading-none sm:text-5xl"
+        style={{ color: accent }}
+      >
+        {big}
+      </span>
+      <span className="mt-2 text-sm font-medium text-[var(--color-text-muted)]">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Year-in-health recap renderer — stats-only, leak-free. Mirrors the app's
+ * YearSummaryScreen card sequence (totals → busiest month → top categories →
+ * family breakdown → activity span).
+ */
+function YearSummaryReport({ bundle }: { bundle: YearSummaryShareBundle }) {
+  const lang: Lang = bundle.lang === 'he' ? 'he' : 'en';
+  const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const s = STRINGS[lang];
+  const t = bundle.totals;
+
+  const isEmpty =
+    t.records === 0 && t.events === 0 && t.chapters === 0;
+
+  return (
+    <section dir={dir} className="relative grain">
+      <span
+        className="leaf"
+        style={{
+          width: 520,
+          height: 520,
+          top: -260,
+          insetInlineEnd: -160,
+          opacity: 0.3,
+        }}
+      />
+      <div
+        className="relative mx-auto max-w-3xl px-5 pb-32 pt-16 sm:px-8"
+        style={
+          lang === 'he'
+            ? { fontFamily: 'var(--font-sans-he), system-ui, sans-serif' }
+            : undefined
+        }
+      >
+        {/* ── Header ── */}
+        <header className="border-b border-[var(--color-border)] pb-8">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-brand-forest)] text-lg font-bold text-white">
+              H
+            </span>
+            <span className="text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">
+              {s.sharedReport}
+            </span>
+          </div>
+
+          <h1 className="mt-6 font-display text-5xl leading-tight text-[var(--color-text)] sm:text-6xl">
+            {bundle.year}
+          </h1>
+          <p className="mt-3 text-lg text-[var(--color-text-soft)]">
+            {s.yearInHealth}
+          </p>
+          {bundle.patientName ? (
+            <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+              {s.patient}: <strong>{bundle.patientName}</strong>
+            </p>
+          ) : null}
+        </header>
+
+        {isEmpty ? (
+          <p className="mt-12 text-[var(--color-text-muted)]">{s.noData}</p>
+        ) : (
+          <div className="mt-10 space-y-6">
+            {/* ── Totals grid ── */}
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <StatTile
+                big={String(t.records)}
+                label={s.totalRecords}
+                accent="var(--color-brand-forest)"
+              />
+              {t.events > 0 ? (
+                <StatTile
+                  big={String(t.events)}
+                  label={s.totalEvents}
+                  accent="var(--color-brand-terracotta)"
+                />
+              ) : null}
+              {t.chapters > 0 ? (
+                <StatTile
+                  big={String(t.chapters)}
+                  label={s.totalChapters}
+                  accent="#8a6410"
+                />
+              ) : null}
+              {t.aiAnalyses > 0 ? (
+                <StatTile
+                  big={String(t.aiAnalyses)}
+                  label={s.aiAnalyses}
+                  accent="var(--color-brand-forest-deep)"
+                />
+              ) : null}
+            </div>
+
+            {/* ── Busiest month ── */}
+            {bundle.busiestMonth && bundle.busiestMonth.month >= 1 ? (
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-6">
+                <p className="text-xs uppercase tracking-[0.12em] text-[var(--color-text-dim)]">
+                  {s.busiestMonth}
+                </p>
+                <p className="mt-1 font-display text-2xl text-[var(--color-text)]">
+                  {monthName(bundle.busiestMonth.month, lang)}
+                </p>
+                <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+                  {s.busiestMonthSub(bundle.busiestMonth.count)}
+                </p>
+              </div>
+            ) : null}
+
+            {/* ── Top categories ── */}
+            {bundle.topCategories.length ? (
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-6">
+                <p className="text-xs uppercase tracking-[0.12em] text-[var(--color-text-dim)]">
+                  {s.topCategories}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {bundle.topCategories.map((c, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-2 rounded-full bg-[rgba(46,93,68,0.07)] px-3 py-1.5 text-sm text-[var(--color-text-soft)]"
+                    >
+                      {c.label}
+                      <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--color-brand-forest)] px-1.5 text-xs font-bold text-white">
+                        {c.count}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {/* ── By family member ── */}
+            {bundle.byMember.length ? (
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-6">
+                <p className="text-xs uppercase tracking-[0.12em] text-[var(--color-text-dim)]">
+                  {s.byMember}
+                </p>
+                <ul className="mt-3 divide-y divide-[var(--color-border)]">
+                  {bundle.byMember.map((m, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center justify-between py-2.5"
+                    >
+                      <span className="text-[15px] text-[var(--color-text-soft)]">
+                        {m.name || '—'}
+                      </span>
+                      <span className="font-semibold text-[var(--color-brand-forest)] tabular-nums">
+                        {m.count}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {/* ── Activity span ── */}
+            {bundle.spanDays && bundle.spanDays > 0 ? (
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-6">
+                <p className="text-xs uppercase tracking-[0.12em] text-[var(--color-text-dim)]">
+                  {s.span}
+                </p>
+                <p className="mt-1 font-display text-3xl text-[var(--color-text)]">
+                  {s.spanValue(bundle.spanDays)}
+                </p>
+                {bundle.firstDate && bundle.lastDate ? (
+                  <p className="mt-1 text-sm text-[var(--color-text-muted)] tabular-nums">
+                    {fmtDate(bundle.firstDate, lang)} – {fmtDate(bundle.lastDate, lang)}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+        )}
+
+        {/* ── Read-only / privacy footnote ── */}
+        <footer className="mt-16 border-t border-[var(--color-border)] pt-6">
+          <p className="text-sm text-[var(--color-text-muted)]">{s.readOnly}</p>
+        </footer>
+      </div>
+    </section>
+  );
+}
+
 export function ShareReport({ bundle }: { bundle: ShareBundle }) {
+  // Year-summary has a distinct stats-only layout — render it separately.
+  if (bundle.kind === 'year_summary') {
+    return <YearSummaryReport bundle={bundle} />;
+  }
+
   const lang: Lang = bundle.lang === 'he' ? 'he' : 'en';
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const s = STRINGS[lang];
