@@ -1,6 +1,7 @@
 'use client';
 
 import { useI18n } from '@/lib/i18n';
+import { APP_STORE_URL } from '@/lib/links';
 
 type Props = {
   href?: string;
@@ -9,7 +10,7 @@ type Props = {
 };
 
 export function AppStoreBadge({
-  href = '#',
+  href = APP_STORE_URL,
   variant = 'primary',
   className = '',
 }: Props) {

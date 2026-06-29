@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
  * The URL fragment (#access_token=...&refresh_token=...&type=...) is passed
  * by Supabase after it verifies the OTP token from the email link.
  *
- * This page reads the fragment and deep-links into the Healthy app.
+ * This page reads the fragment and deep-links into the Healthy Circle app.
  * If the app is not installed, it shows a download link.
  */
 
@@ -96,7 +96,7 @@ export default function AuthConfirmPage() {
               : 'Email confirmed!'}
           </h1>
           <p style={{ color: '#555', margin: 0 }}>
-            {isHe ? 'פותח את Healthy...' : 'Opening Healthy…'}
+            {isHe ? 'פותח את Healthy Circle...' : 'Opening Healthy Circle…'}
           </p>
           <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '1.5rem' }}>
             {isHe ? (
@@ -106,7 +106,7 @@ export default function AuthConfirmPage() {
                   href="https://apps.apple.com/app/id6772523166"
                   style={{ color: '#007aff', textDecoration: 'none' }}
                 >
-                  הורד את Healthy מ-App Store
+                  הורד את Healthy Circle מ-App Store
                 </a>
               </>
             ) : (
@@ -116,7 +116,7 @@ export default function AuthConfirmPage() {
                   href="https://apps.apple.com/app/id6772523166"
                   style={{ color: '#007aff', textDecoration: 'none' }}
                 >
-                  Download Healthy from the App Store
+                  Download Healthy Circle from the App Store
                 </a>
               </>
             )}

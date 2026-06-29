@@ -6,7 +6,7 @@ type Props = {
 };
 
 /**
- * Healthy app mark — a stylized leaf-heart on a soft cream tile.
+ * Healthy Circle app mark — a stylized leaf-heart on a soft cream tile.
  * Pure SVG so it renders identically in OG images and the live site.
  */
 export function HealthyMark({

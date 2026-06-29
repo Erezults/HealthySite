@@ -15,8 +15,8 @@ export function Footer() {
           <div className="col-span-2 sm:col-span-5">
             <Link href="/" className="inline-flex items-center gap-2.5">
               <HealthyMark size={32} />
-              <span className="font-display text-2xl tracking-tight text-[var(--color-text)]">
-                Healthy
+              <span className="font-display text-2xl tracking-tight text-[var(--color-text)] whitespace-nowrap">
+                Healthy Circle
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm text-[var(--color-text-soft)] leading-relaxed">
@@ -33,11 +33,12 @@ export function Footer() {
           </FooterColumn>
 
           <FooterColumn title={t('navSupport')} className="sm:col-span-3">
+            <Link href="/faq">{t('navFaq')}</Link>
             <Link href="/support">{t('navSupport')}</Link>
             <a
               href="mailto:healthy.support@erezults.com"
               dir="ltr"
-              className="font-mono text-xs"
+              className="font-mono text-xs break-all"
             >
               healthy.support@erezults.com
             </a>

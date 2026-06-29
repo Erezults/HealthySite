@@ -2,7 +2,7 @@
 
 **Last updated:** 28 May 2026
 
-These Terms of Service ("Terms") govern your use of the **Healthy** iOS and macOS application and the supporting website at `healthy.erezults.com` (collectively, the "Service"). The Service is operated by **Erez Cohen**, a sole proprietor based in Tel Aviv, Israel ("we", "us", "developer").
+These Terms of Service ("Terms") govern your use of the **Healthy Circle** iOS and macOS application and the supporting website at `healthy.erezults.com` (collectively, the "Service"). The Service is operated by **Erez Cohen**, a sole proprietor based in Tel Aviv, Israel ("we", "us", "developer").
 
 By creating an account, signing in, or using the Service in any way, you ("you", "user") accept these Terms and the [Privacy Policy](/privacy). If you do not accept, do not use the Service.
 
@@ -18,7 +18,7 @@ If you are using the Service on behalf of a family member, including a minor chi
 
 ## 2. The Service, in plain language
 
-Healthy is a tool for **personal record-keeping of health information** and for sharing those records with members of a family group you invite.
+Healthy Circle is a tool for **personal record-keeping of health information** and for sharing those records with members of a family group you invite.
 
 The Service includes:
 
@@ -36,13 +36,13 @@ We may add, change, or remove features over time. Material changes will be discl
 The Service is provided for **personal record-keeping only**. It is **NOT** a medical device, a diagnostic tool, a clinical decision-support system, or a substitute for advice, diagnosis, or treatment from a qualified healthcare professional.
 
 - **The Service does not give medical advice.** Information you enter is yours; the app stores and organizes it.
-- **AI-extracted fields are not verified.** Our AI document parsing returns its best guess for fields such as dates, dosages, and lab values. It can be wrong. Always check against the original document. Never rely on Healthy alone for a medication dose, an appointment date, or a clinical decision.
+- **AI-extracted fields are not verified.** Our AI document parsing returns its best guess for fields such as dates, dosages, and lab values. It can be wrong. Always check against the original document. Never rely on Healthy Circle alone for a medication dose, an appointment date, or a clinical decision.
 - **In an emergency, call your local emergency services** (911 in the US, 101 in Israel, 112 in the EU). Do not use this app to manage time-critical situations.
-- **Always consult a qualified doctor or pharmacist** before changing medications, interpreting lab results, or acting on any health information. Healthy is a notebook, not a clinician.
+- **Always consult a qualified doctor or pharmacist** before changing medications, interpreting lab results, or acting on any health information. Healthy Circle is a notebook, not a clinician.
 
 If you do not accept this disclaimer, you must not use the Service.
 
-This disclaimer follows the principles laid out in **Apple's App Store Review Guidelines § 1.4 (Physical Harm)** and is consistent with the medical-data guidance Apple provides for HealthKit-based apps. Healthy is not a HealthKit app today, but we apply the same caution.
+This disclaimer follows the principles laid out in **Apple's App Store Review Guidelines § 1.4 (Physical Harm)** and is consistent with the medical-data guidance Apple provides for HealthKit-based apps. Healthy Circle is not a HealthKit app today, but we apply the same caution.
 
 ---
 
@@ -88,7 +88,7 @@ The core Service is **free**. Optional premium features (such as AI-assisted doc
 
 - Pricing is shown inside the app before you confirm.
 - Subscriptions auto-renew until canceled.
-- **Cancel at any time** in *iOS Settings → Apple ID → Subscriptions → Healthy*. The current period continues to its expiration date.
+- **Cancel at any time** in *iOS Settings → Apple ID → Subscriptions → Healthy Circle*. The current period continues to its expiration date.
 - **All refunds are processed by Apple** at [reportaproblem.apple.com](https://reportaproblem.apple.com). We do not issue refunds directly.
 - Family Sharing of premium access is supported under Apple's standard family-sharing mechanism.
 
@@ -111,7 +111,7 @@ You can disable AI document parsing at any time in *Settings → AI Document Sca
 
 ## 9. Intellectual property
 
-- We own the app, the website, the Healthy brand, and all related intellectual property.
+- We own the app, the website, the Healthy Circle brand, and all related intellectual property.
 - You own the records, documents, and notes you upload. You grant us a non-exclusive, royalty-free license to host, copy, transmit, display, and process your content **solely to operate the Service for you and your group**.
 - This license ends when you delete the content or the account.
 - We do not claim any right to use your records for marketing, advertising, public display, or AI model training.

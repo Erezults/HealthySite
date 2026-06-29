@@ -13,16 +13,17 @@ export function SiteHeader() {
       <div className="mx-auto max-w-6xl px-5 sm:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
           <HealthyMark size={28} />
-          <span className="font-display text-xl tracking-tight text-[var(--color-text)] group-hover:text-[var(--color-brand-forest-deep)] transition">
-            Healthy
+          <span className="hidden sm:inline font-display text-xl tracking-tight text-[var(--color-text)] group-hover:text-[var(--color-brand-forest-deep)] transition whitespace-nowrap">
+            Healthy Circle
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1 sm:gap-2">
+        <nav className="flex items-center gap-0 sm:gap-2">
+          <NavLink href="/faq">{t('navFaq')}</NavLink>
           <NavLink href="/privacy">{t('navPrivacy')}</NavLink>
           <NavLink href="/terms">{t('navTerms')}</NavLink>
           <NavLink href="/support">{t('navSupport')}</NavLink>
-          <span className="mx-1 sm:mx-2 h-5 w-px bg-[var(--color-border)]" />
+          <span className="hidden sm:block mx-2 h-5 w-px bg-[var(--color-border)]" />
           <LanguageToggle compact />
         </nav>
       </div>
@@ -40,7 +41,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="px-2.5 sm:px-3 py-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition rounded-md hover:bg-[var(--color-surface-hover)]"
+      className="px-1.5 sm:px-3 py-1.5 text-[13px] sm:text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition rounded-md hover:bg-[var(--color-surface-hover)]"
     >
       {children}
     </Link>

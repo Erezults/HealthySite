@@ -5,7 +5,7 @@ import { LegalPage } from '@/components/LegalPage';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description:
-    'How Healthy handles your family’s health data. Special-category health data, encrypted storage, group-only sharing, no advertising, no model training.',
+    'How Healthy Circle handles your family’s health data. Special-category health data, encrypted storage, group-only sharing, no advertising, no model training.',
 };
 
 export default async function PrivacyPage() {

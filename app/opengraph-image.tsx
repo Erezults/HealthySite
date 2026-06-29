@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Healthy — A calmer home for your family’s health.';
+export const alt = 'Healthy Circle — A calmer home for your family’s health.';
 export const contentType = 'image/png';
 export const size = { width: 1200, height: 630 };
 
@@ -44,7 +44,7 @@ export default async function OG() {
               display: 'block',
             }}
           />
-          <span>HEALTHY · iOS &amp; macOS</span>
+          <span>HEALTHY CIRCLE · iOS &amp; macOS</span>
         </div>
 
         {/* logo + name */}
@@ -83,7 +83,7 @@ export default async function OG() {
               letterSpacing: -3,
             }}
           >
-            Healthy
+            Healthy Circle
           </div>
         </div>
 

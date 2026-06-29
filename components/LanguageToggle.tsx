@@ -27,7 +27,7 @@ export function LanguageToggle({ compact }: { compact?: boolean }) {
             type="button"
             onClick={() => setLocale(o.code)}
             aria-pressed={active}
-            className={`relative px-3 py-1.5 rounded-full transition-colors ${
+            className={`relative ${compact ? 'px-2 sm:px-3' : 'px-3'} py-1.5 rounded-full transition-colors ${
               active
                 ? 'bg-[var(--color-brand-forest)] text-[var(--color-paper)]'
                 : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'

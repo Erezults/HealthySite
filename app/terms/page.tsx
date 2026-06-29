@@ -5,7 +5,7 @@ import { LegalPage } from '@/components/LegalPage';
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description:
-    'The legal terms governing use of the Healthy iOS / macOS app and supporting website. Includes Apple HealthKit-style medical disclaimer.',
+    'The legal terms governing use of the Healthy Circle iOS / macOS app and supporting website. Includes Apple HealthKit-style medical disclaimer.',
 };
 
 export default async function TermsPage() {

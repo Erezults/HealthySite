@@ -46,7 +46,7 @@ export function Hero() {
             className="mt-10 flex flex-col sm:flex-row items-center gap-3 reveal"
             style={{ animationDelay: '340ms' }}
           >
-            <AppStoreBadge variant="primary" href="#" />
+            <AppStoreBadge variant="primary" />
             <a
               href="#features"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-sm text-[var(--color-text)] hover:text-[var(--color-brand-forest-deep)] border border-transparent hover:border-[var(--color-border)] transition"

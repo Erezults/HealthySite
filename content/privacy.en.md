@@ -2,7 +2,7 @@
 
 **Last updated:** 28 May 2026
 
-Healthy ("the app", "we", "us") is an iOS and macOS application that lets a family share and organize personal health records. We take privacy seriously — both because the law requires it for **special-category health data** and because we built Healthy for our own families first.
+Healthy Circle ("the app", "we", "us") is an iOS and macOS application that lets a family share and organize personal health records. We take privacy seriously — both because the law requires it for **special-category health data** and because we built Healthy Circle for our own families first.
 
 This Privacy Policy explains, in plain English, what we collect, why, who can see it, and what rights you have. It is a binding legal document between you and **Erez Cohen ("the developer")**, based in Tel Aviv, Israel.
 
@@ -13,19 +13,19 @@ This Privacy Policy explains, in plain English, what we collect, why, who can se
 - **Data controller:** Erez Cohen
 - **Address:** Tel Aviv, Israel
 - **Contact email:** [healthy.support@erezults.com](mailto:healthy.support@erezults.com)
-- **App name:** Healthy (also referred to as "the app" below)
+- **App name:** Healthy Circle (also referred to as "the app" below)
 
 For any privacy question — data access, deletion, correction, complaint — email the address above. We aim to reply within 7 business days.
 
 ---
 
-## 2. What Healthy is, and what it isn't
+## 2. What Healthy Circle is, and what it isn't
 
-Healthy is a **personal record-keeping tool**. It stores health-related information you choose to enter or upload — appointments, prescriptions, lab results, scans, vaccination records, notes — and lets you share that record with members of a *family group* you create.
+Healthy Circle is a **personal record-keeping tool**. It stores health-related information you choose to enter or upload — appointments, prescriptions, lab results, scans, vaccination records, notes — and lets you share that record with members of a *family group* you create.
 
-Healthy is **not** a medical device, **not** a diagnostic tool, and **not** a substitute for professional medical advice. We do not provide medical care. See the Terms of Service for the complete medical disclaimer.
+Healthy Circle is **not** a medical device, **not** a diagnostic tool, and **not** a substitute for professional medical advice. We do not provide medical care. See the Terms of Service for the complete medical disclaimer.
 
-Healthy **does not currently integrate with Apple HealthKit.** We neither read from nor write to HealthKit. If a future version adds HealthKit integration, it will be:
+Healthy Circle **does not currently integrate with Apple HealthKit.** We neither read from nor write to HealthKit. If a future version adds HealthKit integration, it will be:
 
 - opt-in per data type,
 - clearly disclosed in this Privacy Policy,
@@ -83,7 +83,7 @@ We do **not** use third-party analytics SDKs, advertising SDKs, or cross-app tra
 ### 3.6 What we don't collect
 
 - Your contacts, calendar, location, photos library (except images you explicitly attach to a record), microphone audio, or call history.
-- We don't link your Healthy data to any advertising identifier.
+- We don't link your Healthy Circle data to any advertising identifier.
 - We don't sell or rent your data. Ever.
 
 ---
@@ -129,7 +129,7 @@ You can disable AI parsing at any time in **Settings → AI Document Scan**. Doc
 | Audience | What they see |
 |---|---|
 | Members of your family group | Every record in the group's shared profiles, subject to their assigned role. |
-| Other Healthy users (outside your group) | **Nothing.** RLS prevents it. |
+| Other Healthy Circle users (outside your group) | **Nothing.** RLS prevents it. |
 | The developer | Schema and aggregate non-personal metrics only. Never row contents. |
 | Third parties | We do not sell, rent, or share your data with third parties for their own purposes. |
 | Law enforcement / court orders | Only if we receive a valid legal order. We have never received one. If we did, we would push back where appropriate and would inform you unless legally prohibited. |
@@ -154,7 +154,7 @@ Deletion takes effect immediately for the database. Backups containing your data
 
 ## 8. Children
 
-Healthy is not directed at children under 13 (or under 16 in EU jurisdictions where that is the minimum digital consent age). Children's records added by a parent are processed under the parent's authority and consent.
+Healthy Circle is not directed at children under 13 (or under 16 in EU jurisdictions where that is the minimum digital consent age). Children's records added by a parent are processed under the parent's authority and consent.
 
 If you believe we have collected data from a child without proper parental consent, email us and we will delete it promptly.
 
@@ -202,7 +202,7 @@ This Privacy Policy is governed by the laws of the **State of Israel**, without 
 
 ## 13. One last note
 
-We built Healthy because we wanted it for our own families. We have no business model that depends on monetizing your data. We have no advertisers. We have no investors pressuring us to grow at the expense of privacy.
+We built Healthy Circle because we wanted it for our own families. We have no business model that depends on monetizing your data. We have no advertisers. We have no investors pressuring us to grow at the expense of privacy.
 
 If anything in this policy is unclear, email us. We will explain.
 

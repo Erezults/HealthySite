@@ -1,22 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useI18n } from '@/lib/i18n';
-import { FaqAccordion } from './FaqAccordion';
-import { Mail } from 'lucide-react';
+import { SUPPORT_EMAIL } from '@/lib/links';
+import { Mail, ArrowRight } from 'lucide-react';
 
 export function SupportContent() {
   const { t } = useI18n();
-
-  const items = [
-    { q: t('faq1Q'), a: t('faq1A') },
-    { q: t('faq2Q'), a: t('faq2A') },
-    { q: t('faq3Q'), a: t('faq3A') },
-    { q: t('faq4Q'), a: t('faq4A') },
-    { q: t('faq5Q'), a: t('faq5A') },
-    { q: t('faq6Q'), a: t('faq6A') },
-    { q: t('faq7Q'), a: t('faq7A') },
-    { q: t('faq8Q'), a: t('faq8A') },
-  ];
 
   return (
     <>
@@ -45,7 +35,7 @@ export function SupportContent() {
           </p>
 
           <a
-            href="mailto:healthy.support@erezults.com"
+            href={`mailto:${SUPPORT_EMAIL}`}
             className="appstore-sheen mt-10 inline-flex items-center gap-3 rounded-2xl bg-[var(--color-brand-forest)] text-[var(--color-paper)] px-6 py-4 font-medium hover:scale-[1.02] transition-transform shadow-[0_22px_45px_-22px_rgba(31,70,49,0.55)]"
             dir="ltr"
           >
@@ -55,7 +45,7 @@ export function SupportContent() {
 
           <p className="mt-4 text-xs text-[var(--color-text-muted)]">
             <span dir="ltr" className="font-mono">
-              healthy.support@erezults.com
+              {SUPPORT_EMAIL}
             </span>
           </p>
         </div>
@@ -63,10 +53,25 @@ export function SupportContent() {
 
       <section className="relative pb-32">
         <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <h2 className="font-display text-3xl sm:text-4xl tracking-tight text-[var(--color-text)] mb-8">
-            {t('supportFaqTitle')}
-          </h2>
-          <FaqAccordion items={items} />
+          <Link
+            href="/faq"
+            className="group flex items-center justify-between gap-5 rounded-3xl border border-[var(--color-border)] bg-[var(--color-paper)]/70 px-6 sm:px-8 py-7 hover:bg-[var(--color-paper)] transition"
+          >
+            <span className="text-start">
+              <span className="block font-display text-xl sm:text-2xl tracking-tight text-[var(--color-text)]">
+                {t('supportFaqLink')}
+              </span>
+              <span className="mt-1 block text-sm text-[var(--color-text-soft)]">
+                {t('supportFaqLinkSub')}
+              </span>
+            </span>
+            <span
+              aria-hidden
+              className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full border border-[var(--color-border)] text-[var(--color-text-soft)] group-hover:text-[var(--color-brand-forest)] group-hover:border-[var(--color-brand-forest)]/40 transition"
+            >
+              <ArrowRight className="w-4 h-4 rtl:rotate-180" />
+            </span>
+          </Link>
         </div>
       </section>
     </>

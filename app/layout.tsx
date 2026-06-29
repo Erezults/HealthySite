@@ -55,12 +55,12 @@ const siteUrl = 'https://healthy.erezults.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Healthy — A calmer home for your family’s health.',
-    template: '%s · Healthy',
+    default: 'Healthy Circle — A calmer home for your family’s health.',
+    template: '%s · Healthy Circle',
   },
   description:
     'A shared, private health record for families. Appointments, prescriptions, lab results, and scans — gathered into one place on iOS and macOS, with AI that reads your documents.',
-  applicationName: 'Healthy',
+  applicationName: 'Healthy Circle',
   authors: [{ name: 'Erez Cohen' }],
   creator: 'Erez Cohen',
   keywords: [
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     'medical scan AI',
     'prescription tracker',
     'lab results',
-    'Healthy app',
+    'Healthy Circle app',
     'private health vault',
   ],
   alternates: {
@@ -82,17 +82,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Healthy — A calmer home for your family’s health.',
+    title: 'Healthy Circle — A calmer home for your family’s health.',
     description:
       'A shared, private health record for families. Records, prescriptions, lab results, scans — one private place on iOS and macOS.',
     url: siteUrl,
-    siteName: 'Healthy',
+    siteName: 'Healthy Circle',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Healthy — A calmer home for your family’s health.',
+    title: 'Healthy Circle — A calmer home for your family’s health.',
     description:
       'A shared, private health record for families. iOS & macOS.',
   },
