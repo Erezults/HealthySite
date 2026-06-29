@@ -1,36 +1,39 @@
 @import "tailwindcss";
 
-/* ---------- design tokens — Editorial Wellness ---------- */
+/* ---------- design tokens — Refined Light (violet/magenta accent) ---------- */
 @theme inline {
-  /* Warm cream backgrounds */
-  --color-bg: #F7F1E5;
-  --color-bg-elev: #FBF6EC;
-  --color-bg-soft: #F1E8D6;
-  --color-paper: #FFFBF2;
+  /* Backgrounds — white / pale lilac */
+  --color-bg: #FBFAFF;
+  --color-bg-elev: #FFFFFF;
+  --color-bg-soft: #F4F2FC;
+  --color-paper: #FFFFFF;
 
-  --color-surface: rgba(46, 64, 51, 0.04);
-  --color-surface-hover: rgba(46, 64, 51, 0.08);
-  --color-border: rgba(46, 64, 51, 0.12);
-  --color-border-strong: rgba(46, 64, 51, 0.22);
+  --color-surface: rgba(124, 92, 255, 0.045);
+  --color-surface-hover: rgba(124, 92, 255, 0.09);
+  --color-border: #ECE9F5;
+  --color-border-strong: #DBD5EE;
 
-  /* Ink / text — deep forest tones */
-  --color-text: #1F2A22;
-  --color-text-soft: #3B4A40;
-  --color-text-muted: #6B7A6F;
-  --color-text-dim: #98A39B;
+  /* Ink / text — near-black violet-tinted */
+  --color-text: #15131F;
+  --color-text-soft: #4A465A;
+  --color-text-muted: #837E94;
+  --color-text-dim: #A8A2B8;
 
-  /* Primary — forest green */
-  --color-brand-forest: #2E5D44;
-  --color-brand-forest-deep: #1F4631;
-  --color-brand-forest-soft: #6E9982;
+  /* Primary accent — violet (maps onto legacy "forest" slots) */
+  --color-brand-forest: #7C5CFF;
+  --color-brand-forest-deep: #5E3FE0;
+  --color-brand-forest-soft: #B5A4FF;
 
-  /* Accent — terracotta */
-  --color-brand-terracotta: #C36A4B;
-  --color-brand-terracotta-soft: #E29A7E;
+  /* Secondary accent — magenta (maps onto legacy "terracotta" slots) */
+  --color-brand-terracotta: #E15BD6;
+  --color-brand-terracotta-soft: #F0A6E8;
 
-  /* Tertiary — sage / mustard */
-  --color-brand-sage: #B6C7A6;
-  --color-brand-mustard: #D9A23B;
+  /* Tertiary tints */
+  --color-brand-sage: #C9BEF7;
+  --color-brand-mustard: #E15BD6;
+
+  /* Accent gradient */
+  --accent-grad: linear-gradient(108deg, #7C5CFF 0%, #E15BD6 100%);
 
   --font-display: var(--font-display);
   --font-display-he: var(--font-display-he);
@@ -66,6 +69,18 @@ html[lang="he"] body {
   letter-spacing: 0;
 }
 
+/* very subtle keynote-calm depth wash */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 600px at 80% -8%, rgba(225, 91, 214, 0.05), transparent 60%),
+    radial-gradient(1000px 700px at 6% 2%, rgba(124, 92, 255, 0.06), transparent 55%);
+}
+
 /* Display font swap for Hebrew */
 .font-display {
   font-family: var(--font-display), Georgia, "Times New Roman", serif;
@@ -84,7 +99,7 @@ html[lang="he"] .font-display {
 
 /* ---------- selection ---------- */
 ::selection {
-  background: rgba(195, 106, 75, 0.32);
+  background: rgba(124, 92, 255, 0.18);
   color: var(--color-text);
 }
 
@@ -117,8 +132,8 @@ html[lang="he"] .font-display {
   border-radius: 9999px;
   pointer-events: none;
   filter: blur(80px);
-  opacity: 0.55;
-  background: radial-gradient(closest-side, rgba(217, 162, 59, 0.55), transparent 70%);
+  opacity: 0.5;
+  background: radial-gradient(closest-side, rgba(124, 92, 255, 0.28), transparent 70%);
 }
 
 .leaf {
@@ -127,7 +142,26 @@ html[lang="he"] .font-display {
   pointer-events: none;
   filter: blur(70px);
   opacity: 0.42;
-  background: radial-gradient(closest-side, rgba(110, 153, 130, 0.5), transparent 70%);
+  background: radial-gradient(closest-side, rgba(225, 91, 214, 0.22), transparent 70%);
+}
+
+/* ---------- pulsing accent dot ---------- */
+.hc-pulse {
+  animation: hc-pulse 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+@keyframes hc-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(124, 92, 255, 0.45); }
+  70% { box-shadow: 0 0 0 7px rgba(124, 92, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(124, 92, 255, 0); }
+}
+
+/* ---------- gradient-border feature card ---------- */
+.hc-feature-border {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--color-paper), var(--color-paper)) padding-box,
+    var(--accent-grad) border-box;
+  box-shadow: 0 24px 60px -30px rgba(124, 92, 255, 0.4);
 }
 
 /* ---------- staggered reveal ---------- */
@@ -167,8 +201,8 @@ html[lang="he"] .font-display {
   width: 6px;
   height: 6px;
   border-radius: 9999px;
-  background: var(--color-brand-terracotta);
-  box-shadow: 0 0 0 3px rgba(195, 106, 75, 0.18);
+  background: var(--color-brand-forest);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
 }
 
 /* ---------- subtle accent underline ---------- */
@@ -183,7 +217,7 @@ html[lang="he"] .font-display {
   right: 0;
   bottom: 0.08em;
   height: 0.32em;
-  background: rgba(195, 106, 75, 0.28);
+  background: rgba(124, 92, 255, 0.22);
   border-radius: 999px;
   z-index: -1;
 }
@@ -260,7 +294,7 @@ html[lang="he"] .prose-legal h1 {
 .prose-legal code {
   font-family: var(--font-mono), monospace;
   font-size: 0.92em;
-  background: rgba(46, 93, 68, 0.08);
+  background: rgba(124, 92, 255, 0.09);
   padding: 0.12em 0.38em;
   border-radius: 4px;
   color: var(--color-brand-forest-deep);
@@ -278,7 +312,7 @@ html[lang="he"] .prose-legal h1 {
   vertical-align: top;
 }
 .prose-legal th {
-  background: rgba(46, 93, 68, 0.06);
+  background: rgba(124, 92, 255, 0.06);
   color: var(--prose-heading);
   font-weight: 600;
 }

@@ -13,110 +13,116 @@ export type Locale = 'en' | 'he';
 type Dict = Record<string, string | string[] | Array<Record<string, string>>>;
 
 // NOTE: credit numbers below (5 / 20 / 30 base · +15 / +50 / +150 add-ons ·
-// 10 / 30 / 100 packs) MUST match the credit counts written in the App Store
-// Connect product descriptions — ASC is the single source of truth. Prices are
-// never listed here; they live only in the App Store.
+// 10 / 30 / 100 packs) MUST match the credit counts in the App Store Connect
+// product descriptions — ASC is the single source of truth. No prices here.
 const en: Dict = {
   // Nav
   navPrivacy: 'Privacy',
   navTerms: 'Terms',
   navSupport: 'Support',
   navFaq: 'FAQ',
+  navFeatures: 'Features',
+  navPlans: 'Plans',
+  navDownload: 'Download',
 
   // Hero
-  heroEyebrow: 'iOS · macOS · Family health records',
-  heroTitleA: 'A calmer home',
-  heroTitleB: 'for your family’s health.',
+  heroEyebrow: 'Family health, in one place',
+  heroTitleA: 'Your family’s',
+  heroTitleB: 'health,',
+  heroTitleEm: 'at a glance.',
   heroSub:
-    'Healthy Circle is a shared health record for families — appointments, prescriptions, lab results, and scans, gathered in one private place. AI reads your documents. You stay in control.',
-  heroCtaPrimary: 'Download on the App Store',
-  heroCtaSecondary: 'See how it works',
+    'Appointments, prescriptions, labs, scans and vaccines — for everyone you care for, kept private in one calm, shared place.',
+  appStoreL1: 'Download on the',
+  appStoreL2: 'App Store',
+  heroMeta: 'iOS & macOS · Hebrew & English',
+  trustPrivate: 'Private by design',
+  trustAi: 'AI reads your documents',
+  trustCircle: 'One circle for everyone',
 
-  // Features
-  featuresEyebrow: 'Built around four ideas',
-  featuresTitle: 'Made for families who care for each other.',
-  feat1Title: 'A shared family record',
-  feat1Body:
-    'Invite parents, partners, and siblings into one private circle. Every member has a profile; everyone sees the same up-to-date health timeline.',
-  feat2Title: 'AI that reads your documents',
-  feat2Body:
-    'Scan a lab report, prescription, or referral letter. On-device capture plus secure cloud AI extract the dates, doctors, and values — automatically tagged and searchable.',
-  feat3Title: 'iCloud-grade privacy',
-  feat3Body:
-    'End-to-end secure storage backed by Supabase with strict Row-Level Security. Your records are visible only to your group. Never sold. Never shared. Never trained on.',
-  feat4Title: 'Hebrew & English, side by side',
-  feat4Body:
-    'Full RTL support with bilingual UI and OCR. Designed in Tel Aviv for families who speak both languages — and for any family, anywhere.',
+  // Showcase
+  showcaseEyebrow: 'A closer look',
+  showcaseTitleA: 'Designed to be',
+  showcaseTitleB: 'quietly powerful.',
+  showcaseSub:
+    'From a single dashboard to deep insights — beautiful in light and dark mode, on iPhone and Mac.',
+  cap1: 'Your family, at a glance',
+  cap2: 'Track every vital that matters',
+  cap3: 'Deep health insights',
+  cap4: 'Just describe it — AI does the rest',
+  cap5: 'Health for the whole family',
+  cap6: 'Beautiful in dark mode',
 
-  // Tour / sections (homepage)
-  tourEyebrow: 'A quiet, focused home for everything medical',
-  tourTitle: 'Records that finally make sense.',
-  tourSub:
-    'A timeline view per family member. Filter by category. Tap to read the AI summary. Open the original document any time.',
+  // Value strip
+  valPrivacyTitle: 'Private by design',
+  valPrivacyBody:
+    'Records are visible only to your circle — protected by row-level security. Never sold, never used to train models.',
+  valAiTitle: 'AI reads your documents',
+  valAiBody:
+    'Snap a lab result, a script or a vaccine card — AI turns it into clean, structured fields you can trust.',
+  valFamilyTitle: 'One circle for the family',
+  valFamilyBody:
+    'Invite the people you care for and share a complete history in real time — on iPhone and Mac, in Hebrew or English.',
 
-  // Subscriptions (homepage section)
-  subsEyebrow: 'Simple, family-friendly plans',
-  subsTitle: 'Start free. Upgrade only if you need more.',
+  // Plans
+  subsEyebrow: 'Plans',
+  subsTitleA: 'Start free.',
+  subsTitleB: 'Grow with your circle.',
   subsSub:
-    'Healthy Circle is free to use. AI features run on credits — a paid plan or a one-time pack adds more. You can see every price in the App Store before you confirm.',
+    'Every plan includes unlimited manual records and free doctor sharing. AI is metered with simple credits you control.',
   subsFreeName: 'Free',
   subsFreeTagline: 'For getting started',
   subsFreeF1: 'Up to 2 family members',
   subsFreeF2: 'Unlimited manual records & sharing',
-  subsFreeF3: '5 AI credits every month',
+  subsFreeF3: 'Free doctor report sharing',
+  subsFreeCredits: '5 AI credits / month',
   subsFamilyName: 'Family',
-  subsFamilyTagline: 'For the whole family',
+  subsFamilyTagline: 'For the whole household',
   subsFamilyBadge: 'Most popular',
   subsFamilyF1: 'Unlimited family members',
-  subsFamilyF2: 'Full shared history & real-time sync',
-  subsFamilyF3: '20 AI credits every month',
+  subsFamilyF2: 'Full shared health history',
+  subsFamilyF3: 'Real-time sync across devices',
+  subsFamilyF4: 'Free doctor report sharing',
+  subsFamilyCredits: '20 AI credits / month',
   subsLifetimeName: 'Family Lifetime',
-  subsLifetimeTagline: 'One payment, forever',
-  subsLifetimeF1: 'Everything in Family — for life',
-  subsLifetimeF2: 'One-time purchase, never renews',
-  subsLifetimeF3: '30 AI credits every month, forever',
-  subsAiTitle: 'Need more AI? Add credits.',
-  subsAiSub: 'Stack a monthly AI add-on on top of any plan:',
+  subsLifetimeTagline: 'One-time — never renews',
+  subsLifetimeF1: 'Everything in Family',
+  subsLifetimeF2: 'One-time purchase, pay once',
+  subsLifetimeF3: 'No subscription, ever',
+  subsLifetimeCredits: '30 AI credits / month, forever',
+  subsAddonsTitle: 'AI add-ons',
+  subsAddonsPill: 'monthly',
+  subsAddonsDesc: 'Stack on any plan for more credits every month.',
   subsAiStarter: 'AI Starter',
-  subsAiStarterAmt: '+15 credits / month',
   subsAiPro: 'AI Pro',
-  subsAiProAmt: '+50 credits / month',
   subsAiMax: 'AI Max',
-  subsAiMaxAmt: '+150 credits / month',
-  subsBundlesTitle: 'Or buy credits once',
-  subsBundles:
-    'Prefer not to subscribe? One-time packs of 10, 30, or 100 credits — they never expire and stack on top of whatever you have.',
-  subsCreditNote:
-    'Each AI action — a document scan, an analysis, or a chat message — uses 1 credit. Sharing a report with your doctor is always free.',
-  subsPriceNote:
-    'Prices appear in the App Store before you confirm. Subscriptions auto-renew until canceled in iOS Settings; refunds are handled by Apple.',
+  subsPacksTitle: 'Credit packs',
+  subsPacksPill: 'one-time',
+  subsPacksDesc: 'Top up whenever you like — credits never expire.',
+  subsPackUnit: 'credits',
+  subsFineprint:
+    'Each AI action uses 1 credit. Sharing a report with your doctor is always free. Prices are shown in the App Store.',
   subsCta: 'See plans in the App Store',
 
-  // Trust strip — repeating values
-  trust1: 'Made in Tel Aviv',
-  trust2: 'iOS & macOS',
-  trust3: 'No ads',
-  trust4: 'No tracking',
-  trust5: 'No data sold',
-  trust6: 'You own your data',
-
-  // Closing band
-  closingTitle: 'Take a breath. Healthy Circle has it.',
+  // Closing
+  closingTitleA: 'Keep everyone’s health',
+  closingEm: 'close.',
   closingSub:
-    'One private home for your family’s health. From scans to prescriptions. From parents to partners.',
-  closingCta: 'Download on the App Store',
+    'One private circle for the records that matter most. Free to start — on iPhone and Mac.',
 
   // Footer
   footerTagline:
-    'A shared, private home for your family’s health records — iOS & macOS.',
-  footerLegal: '© 2026 Erez Cohen · All rights reserved.',
-  footerMadeIn: 'Made in Tel Aviv, Israel',
+    'A shared, private health record for the people you care for. Built with care.',
+  footerProduct: 'Product',
+  footerCompany: 'Company',
+  footerLegal: '© 2026 Erez Cohen',
+  footerMadePrefix: 'Made in',
+  footerMadeCity: 'Tel Aviv, Israel',
 
   // Support page
   supportEyebrow: 'Support',
   supportTitle: 'We’re a small team. We answer.',
   supportSub:
-    'Healthy Circle is built and supported by Erez Cohen. Real questions get real answers — usually within a day. Use the form, the email, or read the FAQ.',
+    'Healthy Circle is built and supported by Erez Cohen. Real questions get real answers — usually within a day. Use the email, or read the FAQ.',
   supportEmailCta: 'Email healthy.support@erezults.com',
   supportFaqLink: 'Browse the FAQ',
   supportFaqLinkSub: 'Privacy, AI, plans, credits, and your data — all answered.',
@@ -186,101 +192,108 @@ const he: Dict = {
   navTerms: 'תנאים',
   navSupport: 'תמיכה',
   navFaq: 'שאלות',
+  navFeatures: 'תכונות',
+  navPlans: 'מסלולים',
+  navDownload: 'הורדה',
 
   // Hero
-  heroEyebrow: 'iOS · macOS · רשומות בריאות למשפחה',
-  heroTitleA: 'בית שקט',
-  heroTitleB: 'לבריאות המשפחה.',
+  heroEyebrow: 'בריאות המשפחה, במקום אחד',
+  heroTitleA: 'הבריאות של',
+  heroTitleB: 'המשפחה,',
+  heroTitleEm: 'במבט אחד.',
   heroSub:
-    'Healthy Circle הוא תיק בריאות משפחתי משותף — תורים, מרשמים, תוצאות מעבדה וצילומים, במקום פרטי אחד. בינה מלאכותית קוראת את המסמכים. השליטה תמיד אצלך.',
-  heroCtaPrimary: 'הורד מה-App Store',
-  heroCtaSecondary: 'איך זה עובד',
+    'תורים, מרשמים, בדיקות מעבדה, צילומים וחיסונים — לכל מי שאתם דואגים לו, שמורים בפרטיות במקום אחד שקט ומשותף.',
+  appStoreL1: 'הורד מ-',
+  appStoreL2: 'App Store',
+  heroMeta: 'iOS ו-macOS · עברית ואנגלית',
+  trustPrivate: 'פרטי מעצם התכנון',
+  trustAi: 'AI קורא את המסמכים',
+  trustCircle: 'מעגל אחד לכולם',
 
-  // Features
-  featuresEyebrow: 'בנוי סביב ארבעה רעיונות',
-  featuresTitle: 'נבנה למשפחות שדואגות אחת לשנייה.',
-  feat1Title: 'תיק בריאות משפחתי משותף',
-  feat1Body:
-    'הזמן הורים, בני זוג ואחים למעגל פרטי אחד. לכל בן משפחה יש פרופיל, וכולם רואים את אותו ציר זמן רפואי עדכני.',
-  feat2Title: 'בינה מלאכותית שקוראת את המסמכים שלך',
-  feat2Body:
-    'סרוק דוח מעבדה, מרשם או הפניה. צילום במכשיר ו-AI מאובטח בענן שולפים את התאריכים, השמות והערכים — אוטומטית, מתויג וזמין לחיפוש.',
-  feat3Title: 'פרטיות ברמת iCloud',
-  feat3Body:
-    'אחסון מאובטח על Supabase עם Row-Level Security נוקשה. הרשומות שלך גלויות רק לקבוצה שלך. לעולם לא נמכרות, לא משותפות, ולא משמשות לאימון מודלים.',
-  feat4Title: 'עברית ואנגלית, זו לצד זו',
-  feat4Body:
-    'תמיכה מלאה ב-RTL עם ממשק דו-לשוני ו-OCR. תוכנן בתל אביב למשפחות דו-לשוניות — ולכל משפחה בכל מקום.',
+  // Showcase
+  showcaseEyebrow: 'מבט מקרוב',
+  showcaseTitleA: 'תוכנן להיות',
+  showcaseTitleB: 'חזק בשקט.',
+  showcaseSub:
+    'ממסך בית אחד ועד תובנות לעומק — יפהפה במצב בהיר וכהה, ב-iPhone וב-Mac.',
+  cap1: 'המשפחה שלך, במבט אחד',
+  cap2: 'מעקב אחר כל מדד שחשוב',
+  cap3: 'תובנות בריאות לעומק',
+  cap4: 'פשוט תאר — וה-AI עושה את השאר',
+  cap5: 'בריאות לכל המשפחה',
+  cap6: 'יפהפה במצב כהה',
 
-  // Tour
-  tourEyebrow: 'בית שקט וממוקד לכל מה שרפואי',
-  tourTitle: 'רשומות שסוף-סוף מסודרות.',
-  tourSub:
-    'ציר זמן לכל בן משפחה. סינון לפי קטגוריה. נגיעה פותחת את סיכום ה-AI. המסמך המקורי תמיד זמין.',
+  // Value strip
+  valPrivacyTitle: 'פרטי מעצם התכנון',
+  valPrivacyBody:
+    'הרשומות גלויות רק למעגל שלך — מוגנות ב-Row-Level Security. לעולם לא נמכרות, ולא משמשות לאימון מודלים.',
+  valAiTitle: 'AI קורא את המסמכים',
+  valAiBody:
+    'צלם תוצאת מעבדה, מרשם או כרטיס חיסונים — וה-AI הופך אותו לשדות נקיים ומובנים שאפשר לסמוך עליהם.',
+  valFamilyTitle: 'מעגל אחד למשפחה',
+  valFamilyBody:
+    'הזמן את מי שאתה דואג לו ושתף היסטוריה מלאה בזמן אמת — ב-iPhone וב-Mac, בעברית או באנגלית.',
 
-  // Subscriptions (homepage section)
-  subsEyebrow: 'מסלולים פשוטים, ידידותיים למשפחה',
-  subsTitle: 'מתחילים בחינם. משדרגים רק אם צריך עוד.',
+  // Plans
+  subsEyebrow: 'מסלולים',
+  subsTitleA: 'מתחילים בחינם.',
+  subsTitleB: 'גדלים עם המעגל.',
   subsSub:
-    'Healthy Circle חינמי לשימוש. תכונות ה-AI פועלות על קרדיטים — מסלול בתשלום או חבילה חד-פעמית מוסיפים עוד. את כל המחירים אפשר לראות ב-App Store לפני האישור.',
+    'כל מסלול כולל רשומות ידניות ללא הגבלה ושיתוף חינם עם רופא. ה-AI נמדד בקרדיטים פשוטים בשליטתך.',
   subsFreeName: 'חינם',
   subsFreeTagline: 'להתחלה',
   subsFreeF1: 'עד 2 בני משפחה',
   subsFreeF2: 'רשומות ידניות ושיתוף ללא הגבלה',
-  subsFreeF3: '5 קרדיטי AI בכל חודש',
+  subsFreeF3: 'שיתוף דו״ח עם רופא — חינם',
+  subsFreeCredits: '5 קרדיטי AI בחודש',
   subsFamilyName: 'משפחה',
-  subsFamilyTagline: 'לכל המשפחה',
+  subsFamilyTagline: 'לכל הבית',
   subsFamilyBadge: 'הכי פופולרי',
   subsFamilyF1: 'בני משפחה ללא הגבלה',
-  subsFamilyF2: 'היסטוריה משותפת מלאה וסנכרון בזמן אמת',
-  subsFamilyF3: '20 קרדיטי AI בכל חודש',
+  subsFamilyF2: 'היסטוריה רפואית משותפת מלאה',
+  subsFamilyF3: 'סנכרון בזמן אמת בין מכשירים',
+  subsFamilyF4: 'שיתוף דו״ח עם רופא — חינם',
+  subsFamilyCredits: '20 קרדיטי AI בחודש',
   subsLifetimeName: 'משפחה לכל החיים',
-  subsLifetimeTagline: 'תשלום אחד, לתמיד',
-  subsLifetimeF1: 'כל מה שיש ב-Family — לכל החיים',
-  subsLifetimeF2: 'רכישה חד-פעמית, בלי חידושים לעולם',
-  subsLifetimeF3: '30 קרדיטי AI בכל חודש, לתמיד',
-  subsAiTitle: 'צריך עוד AI? הוסף קרדיטים.',
-  subsAiSub: 'אפשר להוסיף תוסף AI חודשי על גבי כל מסלול:',
+  subsLifetimeTagline: 'חד-פעמי — בלי חידושים',
+  subsLifetimeF1: 'כל מה שיש ב-Family',
+  subsLifetimeF2: 'רכישה חד-פעמית, משלמים פעם אחת',
+  subsLifetimeF3: 'בלי מנוי, לעולם',
+  subsLifetimeCredits: '30 קרדיטי AI בחודש, לתמיד',
+  subsAddonsTitle: 'תוספי AI',
+  subsAddonsPill: 'חודשי',
+  subsAddonsDesc: 'מתווספים על כל מסלול לעוד קרדיטים בכל חודש.',
   subsAiStarter: 'AI Starter',
-  subsAiStarterAmt: '+15 קרדיטים בחודש',
   subsAiPro: 'AI Pro',
-  subsAiProAmt: '+50 קרדיטים בחודש',
   subsAiMax: 'AI Max',
-  subsAiMaxAmt: '+150 קרדיטים בחודש',
-  subsBundlesTitle: 'או לקנות קרדיטים פעם אחת',
-  subsBundles:
-    'מעדיפים בלי מנוי? חבילות חד-פעמיות של 10, 30 או 100 קרדיטים — שאינן פגות ומתווספות על מה שכבר יש לכם.',
-  subsCreditNote:
-    'כל פעולת AI — סריקת מסמך, ניתוח או הודעת צ׳אט — צורכת קרדיט אחד. שיתוף דו״ח עם הרופא תמיד חינמי.',
-  subsPriceNote:
-    'המחירים מופיעים ב-App Store לפני האישור. המנויים מתחדשים אוטומטית עד לביטול ב-iOS Settings; החזרים מטופלים על-ידי Apple.',
+  subsPacksTitle: 'חבילות קרדיטים',
+  subsPacksPill: 'חד-פעמי',
+  subsPacksDesc: 'אפשר להוסיף מתי שרוצים — הקרדיטים לא פגים.',
+  subsPackUnit: 'קרדיטים',
+  subsFineprint:
+    'כל פעולת AI צורכת קרדיט אחד. שיתוף דו״ח עם הרופא תמיד חינמי. המחירים מוצגים ב-App Store.',
   subsCta: 'צפה במסלולים ב-App Store',
 
-  // Trust strip
-  trust1: 'תוצרת תל אביב',
-  trust2: 'iOS ו-macOS',
-  trust3: 'בלי פרסומות',
-  trust4: 'בלי tracking',
-  trust5: 'בלי מכירת נתונים',
-  trust6: 'המידע שלך — שלך',
-
   // Closing
-  closingTitle: 'נשום עמוק. Healthy Circle איתך.',
+  closingTitleA: 'שמרו את בריאות כולם',
+  closingEm: 'קרוב.',
   closingSub:
-    'בית פרטי אחד לבריאות המשפחה. מצילומים ועד מרשמים. מהורים ועד בני זוג.',
-  closingCta: 'הורד מה-App Store',
+    'מעגל פרטי אחד לרשומות שהכי חשובות. חינם להתחלה — ב-iPhone וב-Mac.',
 
   // Footer
   footerTagline:
-    'בית משותף ופרטי לרשומות הבריאות של המשפחה — iOS ו-macOS.',
-  footerLegal: '© 2026 ארז כהן · כל הזכויות שמורות.',
-  footerMadeIn: 'נעשה בתל אביב, ישראל',
+    'תיק בריאות משותף ופרטי לאנשים שאתם דואגים להם. נבנה בקפידה.',
+  footerProduct: 'מוצר',
+  footerCompany: 'החברה',
+  footerLegal: '© 2026 ארז כהן',
+  footerMadePrefix: 'נעשה ב',
+  footerMadeCity: 'תל אביב, ישראל',
 
   // Support
   supportEyebrow: 'תמיכה',
   supportTitle: 'אנחנו צוות קטן. אנחנו עונים.',
   supportSub:
-    'Healthy Circle מפותח ונתמך על-ידי ארז כהן. שאלות אמיתיות מקבלות תשובות אמיתיות — בדרך כלל תוך יום. השתמש בטופס, במייל או בשאלות הנפוצות.',
+    'Healthy Circle מפותח ונתמך על-ידי ארז כהן. שאלות אמיתיות מקבלות תשובות אמיתיות — בדרך כלל תוך יום. כתבו לנו במייל, או עיינו בשאלות הנפוצות.',
   supportEmailCta: 'שלח מייל ל-healthy.support@erezults.com',
   supportFaqLink: 'לשאלות הנפוצות',
   supportFaqLinkSub: 'פרטיות, AI, מסלולים, קרדיטים והנתונים שלך — הכול במקום אחד.',

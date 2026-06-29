@@ -1,18 +1,16 @@
 import { Hero } from '@/components/Hero';
-import { Tour } from '@/components/Tour';
-import { Features } from '@/components/Features';
+import { Showcase } from '@/components/Showcase';
+import { Values } from '@/components/Values';
 import { Subscriptions } from '@/components/Subscriptions';
-import { TrustStrip } from '@/components/TrustStrip';
 import { ClosingBand } from '@/components/ClosingBand';
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <Tour />
-      <Features />
+      <Showcase />
+      <Values />
       <Subscriptions />
-      <TrustStrip />
       <ClosingBand />
     </>
   );

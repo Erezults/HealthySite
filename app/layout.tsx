@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import {
   Fraunces,
-  Geist,
+  Figtree,
   Geist_Mono,
   Frank_Ruhl_Libre,
   Heebo,
@@ -19,8 +19,9 @@ const fraunces = Fraunces({
   display: 'swap',
 });
 
-const geistSans = Geist({
+const figtree = Figtree({
   variable: '--font-sans',
+  weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
   display: 'swap',
 });
@@ -113,7 +114,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={[
         fraunces.variable,
-        geistSans.variable,
+        figtree.variable,
         geistMono.variable,
         frankRuhl.variable,
         heebo.variable,

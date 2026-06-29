@@ -15,10 +15,10 @@ export default async function OG() {
           display: 'flex',
           flexDirection: 'column',
           background:
-            'radial-gradient(1200px 600px at 18% 12%, rgba(217,162,59,0.55), transparent 65%), radial-gradient(900px 500px at 92% 88%, rgba(110,153,130,0.55), transparent 65%), #F7F1E5',
+            'radial-gradient(1200px 600px at 18% 12%, rgba(124,92,255,0.22), transparent 65%), radial-gradient(900px 500px at 92% 88%, rgba(225,91,214,0.20), transparent 65%), #FBFAFF',
           padding: 80,
           fontFamily: 'system-ui, -apple-system, sans-serif',
-          color: '#1F2A22',
+          color: '#15131F',
           position: 'relative',
         }}
       >
@@ -31,7 +31,7 @@ export default async function OG() {
             fontSize: 18,
             letterSpacing: 4,
             textTransform: 'uppercase',
-            color: 'rgba(31,42,34,0.65)',
+            color: 'rgba(21,19,31,0.6)',
           }}
         >
           <span
@@ -39,8 +39,8 @@ export default async function OG() {
               width: 10,
               height: 10,
               borderRadius: 9999,
-              background: '#C36A4B',
-              boxShadow: '0 0 16px #C36A4B',
+              background: '#7C5CFF',
+              boxShadow: '0 0 16px #7C5CFF',
               display: 'block',
             }}
           />
@@ -62,15 +62,15 @@ export default async function OG() {
               height: 120,
               borderRadius: 28,
               background:
-                'linear-gradient(135deg, #6E9982 0%, #2E5D44 60%, #1F4631 100%)',
+                'linear-gradient(135deg, #9B6BFF 0%, #7C5CFF 55%, #E15BD6 100%)',
               boxShadow:
-                '0 30px 70px -20px rgba(46,93,68,0.55), inset 0 0 0 2px rgba(255,255,255,0.18)',
+                '0 30px 70px -20px rgba(124,92,255,0.55), inset 0 0 0 2px rgba(255,255,255,0.22)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 78,
               fontWeight: 700,
-              color: '#FBF6EC',
+              color: '#fff',
               letterSpacing: -4,
             }}
           >
@@ -105,7 +105,7 @@ export default async function OG() {
           <span
             style={{
               backgroundImage:
-                'linear-gradient(110deg, #C36A4B, #2E5D44 60%, #6E9982)',
+                'linear-gradient(110deg, #7C5CFF, #E15BD6 60%, #B5A4FF)',
               backgroundClip: 'text',
               color: 'transparent',
               fontStyle: 'italic',
@@ -123,7 +123,7 @@ export default async function OG() {
             gap: 28,
             alignItems: 'center',
             fontSize: 20,
-            color: 'rgba(31,42,34,0.7)',
+            color: 'rgba(21,19,31,0.66)',
             letterSpacing: 0.5,
           }}
         >
@@ -133,7 +133,7 @@ export default async function OG() {
           <span style={{ opacity: 0.4 }}>·</span>
           <span>Family-private.</span>
           <span style={{ opacity: 0.4 }}>·</span>
-          <span style={{ color: '#1F4631' }}>iOS &amp; macOS.</span>
+          <span style={{ color: '#5E3FE0' }}>iOS &amp; macOS.</span>
         </div>
       </div>
     ),

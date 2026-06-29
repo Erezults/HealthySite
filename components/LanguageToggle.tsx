@@ -29,7 +29,7 @@ export function LanguageToggle({ compact }: { compact?: boolean }) {
             aria-pressed={active}
             className={`relative ${compact ? 'px-2 sm:px-3' : 'px-3'} py-1.5 rounded-full transition-colors ${
               active
-                ? 'bg-[var(--color-brand-forest)] text-[var(--color-paper)]'
+                ? 'bg-[var(--color-text)] text-white'
                 : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
             }`}
           >
