@@ -30,6 +30,9 @@ export default function AuthConfirmPage() {
   const [status, setStatus] = useState<Status>('loading');
   const [authType, setAuthType] = useState<AuthType>('signup');
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  // App scheme carried in ?scheme= so we deep-link back to the SAME app that
+  // initiated the flow (dev signups → healthynative-dev, prod → healthynative).
+  const [appScheme, setAppScheme] = useState<string>('healthynative');
 
   // recovery form
   const [pw, setPw] = useState('');
@@ -49,6 +52,7 @@ export default function AuthConfirmPage() {
     const scheme = qp.get('scheme') || process.env.NEXT_PUBLIC_APP_SCHEME || 'healthynative';
 
     setAuthType(type);
+    setAppScheme(scheme);
 
     if (errorDesc) { setStatus('error'); return; }
 
@@ -167,8 +171,17 @@ export default function AuthConfirmPage() {
           <p style={{ color: '#555', margin: 0 }}>
             {isHe ? 'פתחו את האפליקציה והתחברו עם הסיסמה החדשה.' : 'Open the app and sign in with your new password.'}
           </p>
-          <a href="https://apps.apple.com/app/id6772523166" style={{ color: '#7C5CFF', textDecoration: 'none', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+          {/* Deep-link to the SAME app (dev/prod) that started the reset, so the
+              INSTALLED app opens — not the App Store. App Store stays as a fallback
+              for anyone without the app. */}
+          <a
+            href={`${appScheme}://`}
+            style={{ display: 'inline-block', padding: '0.85rem 1.8rem', fontSize: '1rem', fontWeight: 600, borderRadius: 999, background: '#7C5CFF', color: '#fff', textDecoration: 'none', marginTop: '0.5rem' }}
+          >
             {isHe ? 'פתח את Healthy Circle' : 'Open Healthy Circle'}
+          </a>
+          <a href="https://apps.apple.com/app/id6772523166" style={{ color: '#888', textDecoration: 'none', fontSize: '0.82rem', marginTop: '0.25rem' }}>
+            {isHe ? 'אין לך את האפליקציה? הורד מ-App Store' : "Don't have the app? Get it on the App Store"}
           </a>
         </>
       )}
