@@ -94,7 +94,7 @@ We do **not** use third-party analytics SDKs, advertising SDKs, or cross-app tra
 - **Database & file storage:** [Supabase](https://supabase.com) (provider: Supabase Inc., USA, with data hosted in EU region).
 - **Authentication:** Supabase Auth + Apple's Sign in with Apple service.
 - **Push notifications:** Apple Push Notification service (APNs).
-- **AI document parsing:** Google Cloud, via the Gemini API, called server-side through a Supabase Edge Function. See Section 5.
+- **AI document parsing:** a trusted third-party AI provider, called server-side through a Supabase Edge Function. See Section 5.
 
 ### 4.2 Access control — Row-Level Security
 Every row in our database is protected by a **Row-Level Security (RLS) policy**. The database itself refuses to return a row to a user who isn't a member of the group it belongs to. This is not an application-level check that we could accidentally forget — it is enforced by Postgres before any data leaves the database.
@@ -112,15 +112,15 @@ There is **no admin override**. The developer cannot, from a query console, read
 
 When you upload a medical document (lab report, prescription, referral, vaccination record), the app sends the document to a **Supabase Edge Function** running on Supabase's secure infrastructure. The Edge Function:
 
-1. Forwards the document to **Google Gemini 2.5 Flash** via the Gemini API.
+1. Forwards the document to a **trusted third-party AI provider** via its API.
 2. Receives a structured JSON response (dates, doctor names, lab values, etc.).
 3. Returns the structured fields to your device, which you can review, edit, or discard before saving.
 
-**About Gemini and training:** As of the date above, Google's published terms for the paid Gemini API state that **API inputs and outputs are not used to improve Google's models** unless you explicitly opt in. Our integration does not opt in. We pay for API usage; we are not the product.
+**About AI and training:** As of the date above, the AI provider's published terms for its paid API state that **API inputs and outputs are not used to improve the provider's models** unless we explicitly opt in. Our integration does not opt in. We pay for API usage; we are not the product.
 
-**Document retention:** the original document is stored in your private Supabase Storage bucket, protected by the same RLS rules as the rest of your data. It is not stored separately by Google or by us.
+**Document retention:** the original document is stored in your private Supabase Storage bucket, protected by the same RLS rules as the rest of your data. It is not stored separately by the AI provider or by us.
 
-You can disable AI parsing at any time in **Settings → AI Document Scan**. Documents you upload while AI parsing is off are stored only on your device and in your private bucket; no third-party AI service sees them.
+Before any document is sent to the AI service for the first time, the app asks for your explicit permission and explains what will be sent and to whom; nothing is shared until you agree. You can withdraw that permission at any time with the **Settings → Share data with AI** toggle. Documents you add while sharing is off are stored only on your device and in your private bucket; no third-party AI service sees them.
 
 ---
 
@@ -162,10 +162,10 @@ If you believe we have collected data from a child without proper parental conse
 
 ## 9. International transfers
 
-Supabase hosts our data in the EU region by default. Some sub-processors (Apple for APNs, Google for Gemini) may process data in the United States and other regions. Where such transfers occur, they rely on:
+Supabase hosts our data in the EU region by default. Some sub-processors (Apple for APNs, and our AI provider for document parsing) may process data in the United States and other regions. Where such transfers occur, they rely on:
 
 - Standard Contractual Clauses (SCCs) approved by the European Commission, where required,
-- Apple's and Google's published cross-border data-transfer commitments.
+- Apple's and our providers' published cross-border data-transfer commitments.
 
 You consent to these transfers by using the app. If you do not consent, do not use the app.
 
