@@ -49,7 +49,13 @@ export default function AuthConfirmPage() {
     const rt = params.get('refresh_token');
     const type = params.get('type') ?? qp.get('type') ?? 'signup';
     const errorDesc = params.get('error_description') ?? qp.get('error_description');
-    const scheme = qp.get('scheme') || process.env.NEXT_PUBLIC_APP_SCHEME || 'healthynative';
+    // SECURITY: never deep-link the session tokens to an arbitrary scheme. An
+    // attacker could trigger a genuine Supabase email with ?scheme=evilapp and
+    // capture the relayed access+refresh tokens. Allowlist to the two schemes
+    // this app actually registers.
+    const ALLOWED_SCHEMES = ['healthynative', 'healthynative-dev'];
+    const rawScheme = qp.get('scheme') || process.env.NEXT_PUBLIC_APP_SCHEME || 'healthynative';
+    const scheme = ALLOWED_SCHEMES.includes(rawScheme) ? rawScheme : 'healthynative';
 
     setAuthType(type);
     setAppScheme(scheme);
