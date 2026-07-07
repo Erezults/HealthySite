@@ -94,7 +94,7 @@ We do **not** use third-party analytics SDKs, advertising SDKs, or cross-app tra
 - **Database & file storage:** [Supabase](https://supabase.com) (provider: Supabase Inc., USA, with data hosted in EU region).
 - **Authentication:** Supabase Auth + Apple's Sign in with Apple service.
 - **Push notifications:** Apple Push Notification service (APNs).
-- **AI document parsing:** a third-party AI provider, called server-side through a Supabase Edge Function. See Section 5.
+- **AI document parsing:** a third-party AI provider — **Google Gemini** (Google’s AI API) — called server-side through a Supabase Edge Function. See Section 5.
 
 ### 4.2 Access control — Row-Level Security
 Every row in our database is protected by a **Row-Level Security (RLS) policy**. The database itself refuses to return a row to a user who isn't a member of the group it belongs to. This is not an application-level check that we could accidentally forget — it is enforced by Postgres before any data leaves the database.
@@ -112,7 +112,7 @@ There is **no admin override**. The developer cannot, from a query console, read
 
 When you upload a medical document (lab report, prescription, referral, vaccination record), the app sends the document to a **Supabase Edge Function** running on Supabase's secure infrastructure. The Edge Function:
 
-1. Forwards the document to a **third-party AI provider** via its API.
+1. Forwards the document to a **third-party AI provider — Google Gemini** — via its API.
 2. Receives a structured JSON response (dates, doctor names, lab values, etc.).
 3. Returns the structured fields to your device, which you can review, edit, or discard before saving.
 
@@ -160,7 +160,7 @@ If you believe we have collected data from a child without proper parental conse
 
 ## 9. International transfers
 
-Supabase hosts our data in the EU region by default. Some sub-processors (Apple for APNs, and our AI provider for document parsing) may process data in the United States and other regions. Where such transfers occur, they rely on:
+Supabase hosts our data in the EU region by default. Some sub-processors (Apple for APNs, and Google — via the Gemini AI API — for document parsing) may process data in the United States and other regions. Where such transfers occur, they rely on:
 
 - Standard Contractual Clauses (SCCs) approved by the European Commission, where required,
 - Apple's and our providers' published cross-border data-transfer commitments.
