@@ -24,7 +24,7 @@ The Service includes:
 
 - A native iOS / macOS application,
 - Cloud storage and synchronization backed by Supabase,
-- Optional AI-assisted document parsing powered by Google Gemini, called from a secure server-side function,
+- Optional AI-assisted document parsing powered by a third-party AI service, called from a secure server-side function,
 - Push notifications via Apple Push Notification service.
 
 We may add, change, or remove features over time. Material changes will be disclosed in-app or by email.
@@ -101,11 +101,10 @@ EU consumers have a 14-day right of withdrawal under Directive 2011/83/EU. If yo
 When you use AI document parsing:
 
 - You confirm you have the right to upload the document.
-- The document and the AI's structured output are transmitted to Google Gemini through our secure Edge Function, **solely** to produce a structured summary for you.
-- Per Google's current terms for the paid Gemini API, your data is not used to train Google's models. We do not opt into any training mode.
+- The document and the AI's structured output are transmitted to a third-party AI service through our secure Edge Function, **solely** to produce a structured summary for you.
 - Output is best-effort and may contain errors. See Section 3.
 
-You can disable AI document parsing at any time in *Settings → AI Document Scan*.
+Before any document is sent for the first time, the app asks for your explicit permission. You can disable AI document parsing at any time with the *Settings → Share data with AI* toggle.
 
 ---
 
