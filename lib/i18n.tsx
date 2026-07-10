@@ -384,6 +384,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       } else {
         const stored = localStorage.getItem(STORAGE_KEY) as Locale | null;
         if (stored === 'en' || stored === 'he') initial = stored;
+        // No prior choice → auto-detect the browser language so a Hebrew visitor
+        // landing directly on the site sees Hebrew first (matches /auth/confirm).
+        else if (typeof navigator !== 'undefined' && navigator.language && navigator.language.toLowerCase().startsWith('he')) initial = 'he';
       }
     }
     if (initial) setLocaleState(initial);
