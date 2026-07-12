@@ -12,5 +12,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/share/',
     },
+    sitemap: 'https://healthy.erezults.com/sitemap.xml',
   };
 }
