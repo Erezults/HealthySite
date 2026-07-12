@@ -27,11 +27,10 @@ export const metadata: Metadata = {
   referrer: 'no-referrer',
 };
 
-// Env (set in Vercel — NEVER the service-role key here):
+// Env (see .env.example; set in Vercel — NEVER the service-role key here):
 //   NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL = https://sqksoiwzrbtkedsfucal.supabase.co/functions/v1
 //   NEXT_PUBLIC_SUPABASE_ANON_KEY      = <public anon key>
-// These are the first env vars introduced to this repo; the marketing/legal site
-// previously needed none. Documented in §5a of the share-link plan.
+// Documented in §5a of the share-link plan.
 const FUNCTIONS_URL = process.env.NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL;
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 

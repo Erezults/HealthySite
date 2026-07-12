@@ -22,6 +22,12 @@ npm install
 npm run dev     # http://localhost:3000
 ```
 
+### Environment variables
+
+Copy `.env.example` to `.env.local` and fill in the values (also set them in Vercel).
+Required for `/share/[token]` and `/auth/confirm`; the rest of the site runs without them.
+All are public `NEXT_PUBLIC_*` values — never add secrets (e.g. the Supabase service-role key) to this app.
+
 ## Pages
 
 | Path        | Purpose                                                       |
