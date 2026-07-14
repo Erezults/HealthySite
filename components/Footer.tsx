@@ -33,6 +33,7 @@ export function Footer() {
             <FootCol title={t('footerCompany')}>
               <Link href="/privacy">{t('navPrivacy')}</Link>
               <Link href="/terms">{t('navTerms')}</Link>
+              <Link href="/accessibility">{t('navAccessibility')}</Link>
               <Link href="/support">{t('navSupport')}</Link>
               <a href={`mailto:${SUPPORT_EMAIL}`} dir="ltr" className="font-mono text-xs break-all">
                 {SUPPORT_EMAIL}

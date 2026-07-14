@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { Locale } from './i18n';
 
-type Doc = 'privacy' | 'terms';
+type Doc = 'privacy' | 'terms' | 'accessibility';
 
 const ROOT = path.join(process.cwd(), 'content');
 

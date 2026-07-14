@@ -34,5 +34,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.4,
     },
+    {
+      url: `${siteUrl}/accessibility`,
+      changeFrequency: 'monthly',
+      priority: 0.4,
+    },
   ];
 }

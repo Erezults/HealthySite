@@ -63,7 +63,7 @@ export function Hero() {
             style={{ insetInlineStart: '2%', top: '14%', transform: 'rotate(-8deg)', zIndex: 1 }}
           >
             <div className="aspect-[60/100] overflow-hidden">
-              <ScreenImg n={3} alt="" position="center 30%" eager />
+              <ScreenImg n={3} alt={t('cap2')} position="center 30%" eager />
             </div>
           </div>
           <div
@@ -71,7 +71,7 @@ export function Hero() {
             style={{ insetInlineEnd: '2%', top: '11%', transform: 'rotate(7deg)', zIndex: 1 }}
           >
             <div className="aspect-[60/100] overflow-hidden">
-              <ScreenImg n={6} alt="" position="center 30%" eager />
+              <ScreenImg n={6} alt={t('cap4')} position="center 30%" eager />
             </div>
           </div>
           <div

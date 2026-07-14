@@ -16,7 +16,8 @@
   /* Ink / text — near-black violet-tinted */
   --color-text: #15131F;
   --color-text-soft: #4A465A;
-  --color-text-muted: #837E94;
+  /* #726D87 on --color-bg (#FBFAFF) = ~4.76:1, meeting IS 5568/AA 4.5:1 minimum for normal text */
+  --color-text-muted: #726D87;
   --color-text-dim: #A8A2B8;
 
   /* Primary accent — violet (maps onto legacy "forest" slots) */
@@ -381,3 +382,33 @@ html[dir="rtl"] .prose-legal blockquote {
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ---------- accessibility widget: text size ---------- */
+html.a11y-text-1 { font-size: 106%; }
+html.a11y-text-2 { font-size: 113%; }
+html.a11y-text-3 { font-size: 120%; }
+
+/* ---------- accessibility widget: high contrast ---------- */
+html.a11y-high-contrast {
+  --color-text: #000000;
+  --color-text-soft: #1A1A1A;
+  --color-text-muted: #333333;
+  --color-text-dim: #4D4D4D;
+  --color-border: #000000;
+  --color-border-strong: #000000;
+  --color-bg: #FFFFFF;
+  --color-bg-elev: #FFFFFF;
+  --color-bg-soft: #FFFFFF;
+}
+html.a11y-high-contrast body::before { display: none; }
+
+/* ---------- accessibility widget: stop animations ---------- */
+html.a11y-no-motion .marquee-track,
+html.a11y-no-motion .reveal,
+html.a11y-no-motion .shimmer-text,
+html.a11y-no-motion .hc-pulse,
+html.a11y-no-motion .appstore-sheen::before {
+  animation: none !important;
+  transition: none !important;
+}
+html.a11y-no-motion .reveal { opacity: 1; transform: none; }

@@ -184,6 +184,20 @@ const en: Dict = {
   // Legal page common
   legalLastUpdated: 'Last updated',
   legalBackHome: '← Back to home',
+
+  // Accessibility
+  navAccessibility: 'Accessibility',
+  skipToContent: 'Skip to main content',
+  a11yWidgetLabel: 'Accessibility options',
+  a11yPanelTitle: 'Accessibility',
+  a11yTextSize: 'Text size',
+  a11yTextIncrease: 'Increase text size',
+  a11yTextDecrease: 'Decrease text size',
+  a11yTextReset: 'Reset text size',
+  a11yHighContrast: 'High contrast',
+  a11yStopAnimations: 'Stop animations',
+  a11yStatementLink: 'Accessibility statement',
+  a11yClose: 'Close accessibility panel',
 };
 
 const he: Dict = {
@@ -355,6 +369,20 @@ const he: Dict = {
   // Legal common
   legalLastUpdated: 'עודכן לאחרונה',
   legalBackHome: 'חזרה לעמוד הבית →',
+
+  // Accessibility
+  navAccessibility: 'נגישות',
+  skipToContent: 'דלג לתוכן הראשי',
+  a11yWidgetLabel: 'אפשרויות נגישות',
+  a11yPanelTitle: 'נגישות',
+  a11yTextSize: 'גודל טקסט',
+  a11yTextIncrease: 'הגדל טקסט',
+  a11yTextDecrease: 'הקטן טקסט',
+  a11yTextReset: 'אפס גודל טקסט',
+  a11yHighContrast: 'ניגודיות גבוהה',
+  a11yStopAnimations: 'עצור אנימציות',
+  a11yStatementLink: 'הצהרת נגישות',
+  a11yClose: 'סגור פאנל נגישות',
 };
 
 const dicts: Record<Locale, Dict> = { en, he };

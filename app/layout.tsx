@@ -10,6 +10,8 @@ import './globals.css';
 import { I18nProvider } from '@/lib/i18n';
 import { SiteHeader } from '@/components/SiteHeader';
 import { Footer } from '@/components/Footer';
+import { SkipLink } from '@/components/SkipLink';
+import { AccessibilityWidget } from '@/components/AccessibilityWidget';
 
 const fraunces = Fraunces({
   variable: '--font-display',
@@ -123,11 +125,15 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
         <I18nProvider>
+          <SkipLink />
           <div className="relative flex min-h-full flex-1 flex-col">
             <SiteHeader />
-            <main className="flex-1">{children}</main>
+            <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+              {children}
+            </main>
             <Footer />
           </div>
+          <AccessibilityWidget />
         </I18nProvider>
       </body>
     </html>
