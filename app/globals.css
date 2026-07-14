@@ -399,6 +399,9 @@ html.a11y-high-contrast {
   --color-bg: #FFFFFF;
   --color-bg-elev: #FFFFFF;
   --color-bg-soft: #FFFFFF;
+  /* Accent (links, focus rings, CTAs) → accessible blue: #0000CC on #FFFFFF ≈ 13:1 */
+  --color-brand-forest: #0000CC;
+  --color-brand-forest-deep: #000099;
 }
 html.a11y-high-contrast body::before { display: none; }
 

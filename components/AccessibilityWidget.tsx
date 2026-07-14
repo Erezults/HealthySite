@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Accessibility, Contrast, Minus, Plus, RotateCcw, X } from 'lucide-react';
 import Link from 'next/link';
 import { useI18n } from '@/lib/i18n';
@@ -31,6 +31,8 @@ export function AccessibilityWidget() {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<A11yState>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     try {
@@ -51,6 +53,17 @@ export function AccessibilityWidget() {
     setHydrated(true);
   }, []);
 
+  // When the panel opens, move focus into it (expected for role="dialog");
+  // when it closes via Escape/button, return focus to the trigger.
+  useEffect(() => {
+    if (open) closeRef.current?.focus();
+  }, [open]);
+
+  const closePanel = () => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
   const update = (partial: Partial<A11yState>) => {
     setState((prev) => {
       const next = { ...prev, ...partial };
@@ -65,9 +78,11 @@ export function AccessibilityWidget() {
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
+        aria-controls="a11y-panel"
         aria-label={t('a11yWidgetLabel')}
         className="fixed bottom-5 end-5 z-[90] w-12 h-12 rounded-full bg-[var(--color-text)] text-white flex items-center justify-center shadow-[0_12px_30px_-10px_rgba(60,40,120,0.5)] hover:-translate-y-0.5 transition-transform"
       >
@@ -76,15 +91,21 @@ export function AccessibilityWidget() {
 
       {open && (
         <div
+          id="a11y-panel"
           role="dialog"
+          aria-modal="false"
           aria-label={t('a11yPanelTitle')}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') closePanel();
+          }}
           className="fixed bottom-20 end-5 z-[90] w-[280px] rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elev)] shadow-[0_24px_60px_-20px_rgba(60,40,120,0.35)] p-5"
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[15px] font-semibold text-[var(--color-text)]">{t('a11yPanelTitle')}</h2>
             <button
+              ref={closeRef}
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={closePanel}
               aria-label={t('a11yClose')}
               className="text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
             >
