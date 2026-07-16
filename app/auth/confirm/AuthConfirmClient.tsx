@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 
 /**
  * Auth confirmation landing page (shared by the prod and dev routes).
@@ -27,14 +27,14 @@ import { useEffect, useState } from 'react';
  * (in-app email browsers misreport locales).
  */
 
-type Status =
-  | 'loading'
-  | 'redirecting'          // PKCE code relayed into the app (signup / email change)
-  | 'redirect_recovery'    // PKCE code relayed into the app (password recovery)
-  | 'confirmed_manual'     // legacy token link: verified server-side, open app + sign in
-  | 'recovery'             // legacy token link: in-page password reset form
-  | 'recovery_done'
-  | 'error';
+type ParsedCallback = {
+  status: 'redirecting' | 'redirect_recovery' | 'confirmed_manual' | 'recovery' | 'error';
+  /** Deep link into the app: `scheme://auth/confirm?code=…` when we have a
+   *  PKCE code, plain `scheme://` otherwise. Never carries tokens. */
+  appUrl: string;
+  /** Only set for legacy recovery links — consumed by the in-page reset form. */
+  accessToken: string | null;
+};
 
 const FUNCTIONS_URL = process.env.NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL;
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -43,79 +43,89 @@ const AUTH_BASE = (FUNCTIONS_URL?.replace('/functions/v1', '') ?? 'https://sqkso
 const MIN_PW = 8;
 const APP_STORE_URL = 'https://apps.apple.com/app/id6772523166';
 
+function parseCallback(href: string, dev: boolean): ParsedCallback {
+  const u = new URL(href);
+  const hash = new URLSearchParams(u.hash.slice(1));
+  const qp = u.searchParams;
+  const at = hash.get('access_token');
+  const type = hash.get('type') ?? qp.get('type');
+  const code = qp.get('code');
+  const errorDesc =
+    hash.get('error_description') ?? qp.get('error_description') ?? hash.get('error') ?? qp.get('error');
+
+  // dev/prod comes from the route path (the `dev` prop). The legacy ?scheme=
+  // param — used by emails sent before the path split — is honored only
+  // against a hard allowlist, never verbatim.
+  const ALLOWED_SCHEMES = ['healthynative', 'healthynative-dev'];
+  const legacyScheme = qp.get('scheme');
+  const scheme =
+    legacyScheme && ALLOWED_SCHEMES.includes(legacyScheme)
+      ? legacyScheme
+      : dev ? 'healthynative-dev' : 'healthynative';
+
+  if (errorDesc) return { status: 'error', appUrl: `${scheme}://`, accessToken: null };
+
+  if (code) {
+    // PKCE — relay the one-time code into the app, which exchanges it against
+    // its stored code_verifier. This is the ONLY auth material that may ride
+    // a deep link.
+    const relay =
+      `${scheme}://auth/confirm?code=${encodeURIComponent(code)}` +
+      (type ? `&type=${encodeURIComponent(type)}` : '');
+    return {
+      status: type === 'recovery' ? 'redirect_recovery' : 'redirecting',
+      appUrl: relay,
+      accessToken: null,
+    };
+  }
+
+  // Legacy implicit links (emails sent before the app moved to PKCE): the
+  // tokens stay HERE in the browser — they are never deep-linked (F-703).
+  if (at && type === 'recovery') return { status: 'recovery', appUrl: `${scheme}://`, accessToken: at };
+
+  // signup / email_change: GoTrue's /verify already confirmed the address
+  // before redirecting here — the account is verified. Open the app clean.
+  if (at) return { status: 'confirmed_manual', appUrl: `${scheme}://`, accessToken: null };
+
+  return { status: 'error', appUrl: `${scheme}://`, accessToken: null };
+}
+
+// The callback URL (incl. the #fragment) is client-only external input; served
+// HTML prerenders the 'loading' state (server snapshot = null) and hydration
+// swaps in the parsed result. No subscription needed — the URL never changes
+// under us (the only navigation we do is leaving to the app scheme).
+const subscribeNever = () => () => {};
+const getHref = () => window.location.href;
+const getServerHref = () => null;
+
 export default function AuthConfirmClient({ dev }: { dev: boolean }) {
-  const [status, setStatus] = useState<Status>('loading');
-  // Deep link into the app: `scheme://auth/confirm?code=…` when we have a PKCE
-  // code, plain `scheme://` otherwise. Never carries tokens (see header note).
-  const [appUrl, setAppUrl] = useState<string>(dev ? 'healthynative-dev://' : 'healthynative://');
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const href = useSyncExternalStore(subscribeNever, getHref, getServerHref);
+  const parsed = useMemo(() => (href ? parseCallback(href, dev) : null), [href, dev]);
 
   // recovery form
   const [pw, setPw] = useState('');
   const [pw2, setPw2] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
+  const [resetDone, setResetDone] = useState(false);
 
+  const status = resetDone ? 'recovery_done' : (parsed?.status ?? 'loading');
+  const appUrl = parsed?.appUrl ?? (dev ? 'healthynative-dev://' : 'healthynative://');
+
+  // Auto-open the app when we have a PKCE code to relay. A genuine side effect
+  // (navigation) — on a device without the app this is a no-op and the button
+  // below stays as the manual fallback.
   useEffect(() => {
-    const hash = new URLSearchParams(window.location.hash.slice(1));
-    const qp = new URLSearchParams(window.location.search);
-    const at = hash.get('access_token');
-    const type = hash.get('type') ?? qp.get('type');
-    const code = qp.get('code');
-    const errorDesc =
-      hash.get('error_description') ?? qp.get('error_description') ?? hash.get('error') ?? qp.get('error');
-
-    // dev/prod comes from the route path (the `dev` prop). The legacy ?scheme=
-    // param — used by emails sent before the path split — is honored only
-    // against a hard allowlist, never verbatim.
-    const ALLOWED_SCHEMES = ['healthynative', 'healthynative-dev'];
-    const legacyScheme = qp.get('scheme');
-    const scheme =
-      legacyScheme && ALLOWED_SCHEMES.includes(legacyScheme)
-        ? legacyScheme
-        : dev ? 'healthynative-dev' : 'healthynative';
-
-    if (errorDesc) { setAppUrl(`${scheme}://`); setStatus('error'); return; }
-
-    if (code) {
-      // PKCE — relay the one-time code into the app, which exchanges it against
-      // its stored code_verifier. This is the ONLY auth material that may ride
-      // a deep link.
-      const relay =
-        `${scheme}://auth/confirm?code=${encodeURIComponent(code)}` +
-        (type ? `&type=${encodeURIComponent(type)}` : '');
-      setAppUrl(relay);
-      setStatus(type === 'recovery' ? 'redirect_recovery' : 'redirecting');
-      window.location.href = relay; // no-op on a device without the app; button stays as fallback
-      return;
+    if (parsed && (parsed.status === 'redirecting' || parsed.status === 'redirect_recovery')) {
+      window.location.href = parsed.appUrl;
     }
-
-    // Legacy implicit links (emails sent before the app moved to PKCE): the
-    // tokens stay HERE in the browser — they are never deep-linked (F-703).
-    if (at && type === 'recovery') {
-      setAppUrl(`${scheme}://`);
-      setAccessToken(at);
-      setStatus('recovery');
-      return;
-    }
-
-    if (at) {
-      // signup / email_change: GoTrue's /verify already confirmed the address
-      // before redirecting here — the account is verified. Open the app clean.
-      setAppUrl(`${scheme}://`);
-      setStatus('confirmed_manual');
-      return;
-    }
-
-    setAppUrl(`${scheme}://`);
-    setStatus('error');
-  }, [dev]);
+  }, [parsed]);
 
   async function submitNewPassword() {
     setFormErr(null);
     if (pw.length < MIN_PW) { setFormErr(`Password must be at least ${MIN_PW} characters · הסיסמה חייבת לכלול לפחות ${MIN_PW} תווים`); return; }
     if (pw !== pw2) { setFormErr('Passwords do not match · הסיסמאות אינן תואמות'); return; }
-    if (!accessToken || !ANON_KEY) { setFormErr('Configuration error — retry from the app · שגיאה בהגדרות, נסו שוב מהאפליקציה'); return; }
+    if (!parsed?.accessToken || !ANON_KEY) { setFormErr('Configuration error — retry from the app · שגיאה בהגדרות, נסו שוב מהאפליקציה'); return; }
     setSubmitting(true);
     try {
       const res = await fetch(`${AUTH_BASE}/user`, {
@@ -123,7 +133,7 @@ export default function AuthConfirmClient({ dev }: { dev: boolean }) {
         headers: {
           'Content-Type': 'application/json',
           apikey: ANON_KEY,
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${parsed.accessToken}`,
         },
         body: JSON.stringify({ password: pw }),
       });
@@ -131,7 +141,7 @@ export default function AuthConfirmClient({ dev }: { dev: boolean }) {
         const j = await res.json().catch(() => ({}));
         throw new Error(j?.msg || j?.error_description || j?.message || 'Failed to update password · עדכון הסיסמה נכשל');
       }
-      setStatus('recovery_done');
+      setResetDone(true);
     } catch (e) {
       setFormErr(e instanceof Error ? e.message : String(e));
     } finally {
