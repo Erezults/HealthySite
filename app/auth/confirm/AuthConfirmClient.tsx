@@ -34,6 +34,9 @@ type ParsedCallback = {
   appUrl: string;
   /** Only set for legacy recovery links — consumed by the in-page reset form. */
   accessToken: string | null;
+  /** token_hash recovery links: redeemed in-page against GoTrue /verify when the
+   *  user chooses to reset here rather than in the app. */
+  tokenHash?: string | null;
 };
 
 const FUNCTIONS_URL = process.env.NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL;
@@ -50,6 +53,7 @@ function parseCallback(href: string, dev: boolean): ParsedCallback {
   const at = hash.get('access_token');
   const type = hash.get('type') ?? qp.get('type');
   const code = qp.get('code');
+  const tokenHash = qp.get('token_hash');
   const errorDesc =
     hash.get('error_description') ?? qp.get('error_description') ?? hash.get('error') ?? qp.get('error');
 
@@ -76,6 +80,21 @@ function parseCallback(href: string, dev: boolean): ParsedCallback {
       status: type === 'recovery' ? 'redirect_recovery' : 'redirecting',
       appUrl: relay,
       accessToken: null,
+    };
+  }
+
+  // token_hash links (2026-09-21, portfolio-wide): the PKCE code above only
+  // works within GoTrue's FIVE-minute flow state on the device that signed
+  // up; a token_hash is redeemed with verifyOtp for the OTP's lifetime, on
+  // any device. Still no session material in the deep link.
+  if (tokenHash) {
+    const otpType = type ?? 'signup';
+    const relay = `${scheme}://auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=${encodeURIComponent(otpType)}`;
+    return {
+      status: otpType === 'recovery' ? 'redirect_recovery' : 'redirecting',
+      appUrl: relay,
+      accessToken: null,
+      tokenHash: otpType === 'recovery' ? tokenHash : null,
     };
   }
 
@@ -108,8 +127,10 @@ export default function AuthConfirmClient({ dev }: { dev: boolean }) {
   const [submitting, setSubmitting] = useState(false);
   const [formErr, setFormErr] = useState<string | null>(null);
   const [resetDone, setResetDone] = useState(false);
+  // token_hash recovery: the app may not be on this device — offer the form here.
+  const [resetHere, setResetHere] = useState(false);
 
-  const status = resetDone ? 'recovery_done' : (parsed?.status ?? 'loading');
+  const status = resetDone ? 'recovery_done' : resetHere ? 'recovery' : (parsed?.status ?? 'loading');
   const appUrl = parsed?.appUrl ?? (dev ? 'healthynative-dev://' : 'healthynative://');
 
   // Auto-open the app when we have a PKCE code to relay. A genuine side effect
@@ -125,15 +146,30 @@ export default function AuthConfirmClient({ dev }: { dev: boolean }) {
     setFormErr(null);
     if (pw.length < MIN_PW) { setFormErr(`Password must be at least ${MIN_PW} characters · הסיסמה חייבת לכלול לפחות ${MIN_PW} תווים`); return; }
     if (pw !== pw2) { setFormErr('Passwords do not match · הסיסמאות אינן תואמות'); return; }
-    if (!parsed?.accessToken || !ANON_KEY) { setFormErr('Configuration error — retry from the app · שגיאה בהגדרות, נסו שוב מהאפליקציה'); return; }
+    if ((!parsed?.accessToken && !parsed?.tokenHash) || !ANON_KEY) { setFormErr('Configuration error — retry from the app · שגיאה בהגדרות, נסו שוב מהאפליקציה'); return; }
     setSubmitting(true);
     try {
+      let accessToken = parsed.accessToken;
+      if (!accessToken && parsed.tokenHash) {
+        // Redeem the one-time token_hash here, in the browser, for a short-lived
+        // session that only ever sets the password. Nothing leaves this page.
+        const v = await fetch(`${AUTH_BASE}/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: ANON_KEY },
+          body: JSON.stringify({ type: 'recovery', token_hash: parsed.tokenHash }),
+        });
+        const vj = await v.json().catch(() => ({}));
+        if (!v.ok || !vj?.access_token) {
+          throw new Error(vj?.msg || vj?.error_description || 'This link has expired or was already used · הקישור פג תוקף או כבר נוצל');
+        }
+        accessToken = vj.access_token as string;
+      }
       const res = await fetch(`${AUTH_BASE}/user`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           apikey: ANON_KEY,
-          Authorization: `Bearer ${parsed.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ password: pw }),
       });
@@ -209,6 +245,12 @@ export default function AuthConfirmClient({ dev }: { dev: boolean }) {
             Open Healthy Circle
             <span style={btnHeLineStyle} lang="he" dir="rtl">פתחו את Healthy Circle</span>
           </a>
+          {parsed?.tokenHash && (
+            <button onClick={() => setResetHere(true)} style={linkBtnStyle}>
+              The app isn&apos;t on this device? Set the new password here
+              <span style={heLineStyle} lang="he" dir="rtl">האפליקציה לא במכשיר הזה? בחרו סיסמה חדשה כאן</span>
+            </button>
+          )}
         </>
       )}
 
@@ -307,6 +349,10 @@ const btnLinkStyle: React.CSSProperties = {
 };
 const btnHeLineStyle: React.CSSProperties = {
   display: 'block', fontSize: '0.9rem', fontWeight: 500, color: 'rgba(255,255,255,.9)',
+};
+const linkBtnStyle: React.CSSProperties = {
+  background: 'none', border: 'none', color: '#7C5CFF', cursor: 'pointer',
+  fontSize: '0.9rem', marginTop: '0.25rem', lineHeight: 1.5, fontFamily: 'inherit',
 };
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.8rem 1rem', fontSize: '1rem', borderRadius: 12,
