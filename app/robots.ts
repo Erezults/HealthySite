@@ -1,5 +1,8 @@
 import type { MetadataRoute } from 'next';
 
+// Static export (GitHub Pages) — generated once at build time.
+export const dynamic = 'force-static';
+
 /**
  * Marketing/legal pages are public and indexable. The doctor-share viewer
  * (`/share/*`) renders private medical reports — it must NEVER be crawled or

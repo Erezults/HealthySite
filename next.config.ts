@@ -1,21 +1,17 @@
 import type { NextConfig } from "next";
 
+// Static export for GitHub Pages (2026-10-23; previously Vercel). GitHub Pages
+// cannot send per-path HTTP headers, so the former `/share/*` headers
+// (Cache-Control no-store, X-Robots-Tag, Referrer-Policy) now live as:
+//  • <meta name="robots" noindex,nofollow> + <meta name="referrer" no-referrer>
+//    on the share shells (app/share/page.tsx, app/not-found.tsx → 404.html),
+//  • robots.txt `Disallow: /share/`,
+//  • no-store / noindex / no-referrer on every doctor-share edge-function
+//    response (the only place PHI travels — the HTML shell holds none).
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        // Doctor-share viewer renders private medical reports — never cache,
-        // never index, never leak the token via Referer. Scoped to /share/*
-        // only; the rest of the site keeps its defaults. (See share-link plan §5b.)
-        source: "/share/:path*",
-        headers: [
-          { key: "Cache-Control", value: "no-store, private" },
-          { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
-          { key: "Referrer-Policy", value: "no-referrer" },
-        ],
-      },
-    ];
-  },
+  output: "export",
+  trailingSlash: true,
+  images: { unoptimized: true },
 };
 
 export default nextConfig;

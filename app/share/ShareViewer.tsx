@@ -1,38 +1,25 @@
-import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { ShareReport, type ShareBundle } from './ShareReport';
+'use client';
 
 /**
- * F2 Doctor Share — public, read-only medical report viewer.
+ * F2 Doctor Share — public, read-only medical report viewer (client-side).
  *
- * Security posture (see HealtyNative docs/plans/2026-06-14-doctor-share.md §1, §4, §5):
- *  - Server-rendered per request; never statically cached, never indexed.
- *  - Talks to the `doctor-share` Supabase Edge function (redeem mode) over plain
- *    `fetch` (no Supabase SDK in this repo). The function is `verify_jwt=false`,
- *    so the only credential needed is the public anon key sent as the `apikey`
- *    header (it is the API-gateway key, already public).
+ * Security posture (see HealthyNative docs/plans/2026-06-14-doctor-share.md §1, §4, §5):
+ *  - Static shell (GitHub Pages) with NO PHI: `/share/` is share/index.html and
+ *    every `/share/<token>[/doc/<docId>]` URL is served the 404.html shell, which
+ *    renders this component. The bundle is fetched in the browser, at view time,
+ *    from the `doctor-share` edge function (CORS-locked to this origin, every
+ *    response no-store / noindex / no-referrer).
  *  - The browser NEVER sees group_id / member ids / row uuids — the edge function
  *    returns an already-sanitized, id-free bundle (whitelist projection).
- *  - The raw token lives only in the URL path, never in a querystring.
+ *  - The raw token lives only in the URL path. It is NEVER put into
+ *    document.title, logs or analytics (the site has none), and the page sends
+ *    no Referer (meta referrer=no-referrer on the shell).
  */
 
-// Per-request render only — no static cache of medical content.
-export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
-
-// Belt-and-suspenders against indexing/caching of PHI.
-export const metadata: Metadata = {
-  title: 'Shared health report',
-  robots: { index: false, follow: false, nocache: true },
-  referrer: 'no-referrer',
-};
-
-// Env (see .env.example; set in Vercel — NEVER the service-role key here):
-//   NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL = https://sqksoiwzrbtkedsfucal.supabase.co/functions/v1
-//   NEXT_PUBLIC_SUPABASE_ANON_KEY      = <public anon key>
-// Documented in §5a of the share-link plan.
-const FUNCTIONS_URL = process.env.NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL;
-const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { callDoctorShare, parseSharePath, type SharePath } from '@/lib/shareApi';
+import { ShareReport, type ShareBundle } from './ShareReport';
+import DocRedirect from './DocRedirect';
 
 type RedeemErrorKind =
   | 'invalid' // 404 not_found / bad token
@@ -46,24 +33,9 @@ type RedeemResult =
   | { ok: false; kind: RedeemErrorKind };
 
 async function redeem(token: string): Promise<RedeemResult> {
-  if (!FUNCTIONS_URL || !ANON_KEY) {
-    // Misconfiguration — fail closed, leak nothing.
-    return { ok: false, kind: 'unavailable' };
-  }
-
   let res: Response;
   try {
-    res = await fetch(`${FUNCTIONS_URL}/doctor-share`, {
-      method: 'POST',
-      cache: 'no-store',
-      headers: {
-        'content-type': 'application/json',
-        // Public anon key — gateway credential, not a user JWT.
-        apikey: ANON_KEY,
-        authorization: `Bearer ${ANON_KEY}`,
-      },
-      body: JSON.stringify({ mode: 'redeem', token }),
-    });
+    res = await callDoctorShare({ mode: 'redeem', token });
   } catch {
     return { ok: false, kind: 'unavailable' };
   }
@@ -95,37 +67,67 @@ async function redeem(token: string): Promise<RedeemResult> {
       if (code === 'revoked') return { ok: false, kind: 'revoked' };
       if (code === 'exhausted') return { ok: false, kind: 'exhausted' };
       return { ok: false, kind: 'expired' };
-    case 429:
-      return { ok: false, kind: 'unavailable' };
     default:
       return { ok: false, kind: 'unavailable' };
   }
 }
 
-export default async function SharePage({
-  params,
-}: {
-  params: Promise<{ token: string }>;
-}) {
-  const { token } = await params;
+// window.location is read via useSyncExternalStore so the statically
+// prerendered HTML (no location → 'none'/loading) hydrates without mismatch.
+const subscribeNoop = () => () => {};
+const getLocationKey = () => window.location.pathname + window.location.search;
+const getServerLocationKey = () => '';
 
-  // Touch headers() to force this segment onto the dynamic path (defense in
-  // depth alongside `dynamic = 'force-dynamic'` — never prerendered).
-  await headers();
-
-  const result = await redeem(token);
-
-  if (!result.ok) {
-    return <ShareErrorState kind={result.kind} />;
+/** Path-aware entry point: report, document redirect, or invalid-link state. */
+export function ShareViewer() {
+  const locKey = useSyncExternalStore(subscribeNoop, getLocationKey, getServerLocationKey);
+  if (!locKey) return <ShareLoading />;
+  const q = locKey.indexOf('?');
+  const path: SharePath = parseSharePath(
+    q === -1 ? locKey : locKey.slice(0, q),
+    q === -1 ? '' : locKey.slice(q),
+  );
+  if (path.kind === 'doc') {
+    return <DocRedirect token={path.token} docId={path.docId} kind={path.docKind} />;
   }
+  if (path.kind === 'report') return <ShareReportLoader key={path.token} token={path.token} />;
+  return <ShareErrorState kind="invalid" />;
+}
 
+function ShareReportLoader({ token }: { token: string }) {
+  const [result, setResult] = useState<RedeemResult | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    redeem(token).then((r) => {
+      if (!cancelled) setResult(r);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
+
+  if (!result) return <ShareLoading />;
+  if (!result.ok) return <ShareErrorState kind={result.kind} />;
   return <ShareReport bundle={result.bundle} />;
+}
+
+function ShareLoading() {
+  return (
+    <section className="relative min-h-[70vh]" aria-busy="true">
+      <div className="relative mx-auto max-w-md px-6 py-32 text-center text-[var(--color-text-muted)]">
+        <p>Loading report…</p>
+        <p dir="rtl" className="mt-1">
+          טוען דוח…
+        </p>
+      </div>
+    </section>
+  );
 }
 
 /**
  * Friendly, leak-free error states. NO data, NO token, NO links into the app.
- * Bilingual is impossible to resolve server-side (locale is client-stored), so
- * we render both EN + HE lines stacked — short, calm, and self-explanatory.
+ * Both EN + HE lines stacked — short, calm, and self-explanatory.
  */
 function ShareErrorState({ kind }: { kind: RedeemErrorKind }) {
   const copy: Record<RedeemErrorKind, { en: string; he: string }> = {
@@ -153,7 +155,7 @@ function ShareErrorState({ kind }: { kind: RedeemErrorKind }) {
   const c = copy[kind];
 
   return (
-    <section className="relative min-h-[70vh] grain">
+    <section className="relative min-h-[70vh] grain" data-share-state={kind}>
       <span
         className="sun"
         style={{
@@ -180,10 +182,7 @@ function ShareErrorState({ kind }: { kind: RedeemErrorKind }) {
         <p className="mt-8 text-sm text-[var(--color-text-muted)]">
           Shared health reports are private and time-limited.
         </p>
-        <p
-          dir="rtl"
-          className="mt-1 text-sm text-[var(--color-text-muted)]"
-        >
+        <p dir="rtl" className="mt-1 text-sm text-[var(--color-text-muted)]">
           דוחות בריאות משותפים הם פרטיים ומוגבלים בזמן.
         </p>
       </div>

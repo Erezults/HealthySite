@@ -1,5 +1,8 @@
 import type { MetadataRoute } from 'next';
 
+// Static export (GitHub Pages) — generated once at build time.
+export const dynamic = 'force-static';
+
 const siteUrl = 'https://healthy.erezults.com';
 
 /**

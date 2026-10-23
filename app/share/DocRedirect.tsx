@@ -1,12 +1,12 @@
 'use client';
 
-// Client half of the shared-document link: calls redeem-doc and forwards the
-// browser to the signed URL. Kept tiny — errors show a plain bilingual line.
+// Shared-document link target (/share/<token>/doc/<docId>?k=r|c — the links
+// inside the doctor report PDF): calls redeem-doc (validates the share token
+// WITHOUT consuming a view) and forwards the browser to the fresh, short-lived
+// signed URL. PHI never touches this page. Errors show a plain bilingual line.
 
 import { useEffect, useState } from 'react';
-
-const FUNCTIONS_URL = process.env.NEXT_PUBLIC_SUPABASE_FUNCTIONS_URL;
-const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { callDoctorShare } from '@/lib/shareApi';
 
 export default function DocRedirect({
   token,
@@ -22,21 +22,8 @@ export default function DocRedirect({
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      if (!FUNCTIONS_URL || !ANON_KEY) {
-        setState('error');
-        return;
-      }
       try {
-        const res = await fetch(`${FUNCTIONS_URL}/doctor-share`, {
-          method: 'POST',
-          cache: 'no-store',
-          headers: {
-            'content-type': 'application/json',
-            apikey: ANON_KEY,
-            authorization: `Bearer ${ANON_KEY}`,
-          },
-          body: JSON.stringify({ mode: 'redeem-doc', token, docId, kind }),
-        });
+        const res = await callDoctorShare({ mode: 'redeem-doc', token, docId, kind });
         if (cancelled) return;
         if (res.status === 410) {
           setState('gone');
@@ -65,9 +52,9 @@ export default function DocRedirect({
         : 'המסמך אינו זמין · Document unavailable';
 
   return (
-    <main
+    <div
       style={{
-        minHeight: '100vh',
+        minHeight: '70vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -78,6 +65,6 @@ export default function DocRedirect({
         textAlign: 'center',
       }}>
       {msg}
-    </main>
+    </div>
   );
 }
