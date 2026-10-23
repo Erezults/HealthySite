@@ -44,7 +44,7 @@ const en: Dict = {
   showcaseTitleA: 'Designed to be',
   showcaseTitleB: 'quietly powerful.',
   showcaseSub:
-    'From a single dashboard to deep insights — beautiful in light and dark mode, on iPhone and Mac.',
+    'From a single dashboard to deep insights — beautiful in light and dark mode, on iPhone, iPad and Mac.',
   cap1: 'Your family, at a glance',
   cap2: 'Track every vital that matters',
   cap3: 'Deep health insights',
@@ -61,7 +61,7 @@ const en: Dict = {
     'Snap a lab result, a script or a vaccine card — AI turns it into clean, structured fields you can trust.',
   valFamilyTitle: 'One circle for the family',
   valFamilyBody:
-    'Invite the people you care for and share a complete history in real time — on iPhone and Mac, in Hebrew or English.',
+    'Invite the people you care for and share a complete history in real time — on iPhone, iPad and Mac, in Hebrew or English.',
 
   // Plans
   subsEyebrow: 'Plans',
@@ -107,7 +107,7 @@ const en: Dict = {
   closingTitleA: 'Keep everyone’s health',
   closingEm: 'close.',
   closingSub:
-    'One private circle for the records that matter most. Free to start — on iPhone and Mac.',
+    'One private circle for the records that matter most. Free to start — on iPhone, iPad and Mac.',
 
   // Footer
   footerTagline:
@@ -229,7 +229,7 @@ const he: Dict = {
   showcaseTitleA: 'תוכנן להיות',
   showcaseTitleB: 'חזק בשקט.',
   showcaseSub:
-    'ממסך בית אחד ועד תובנות לעומק — יפהפה במצב בהיר וכהה, ב-iPhone וב-Mac.',
+    'ממסך בית אחד ועד תובנות לעומק — יפהפה במצב בהיר וכהה, ב-iPhone, ב-iPad וב-Mac.',
   cap1: 'המשפחה שלך, במבט אחד',
   cap2: 'מעקב אחר כל מדד שחשוב',
   cap3: 'תובנות בריאות לעומק',
@@ -246,7 +246,7 @@ const he: Dict = {
     'צלם תוצאת מעבדה, מרשם או כרטיס חיסונים — וה-AI הופך אותו לשדות נקיים ומובנים שאפשר לסמוך עליהם.',
   valFamilyTitle: 'מעגל אחד למשפחה',
   valFamilyBody:
-    'הזמן את מי שאתה דואג לו ושתף היסטוריה מלאה בזמן אמת — ב-iPhone וב-Mac, בעברית או באנגלית.',
+    'הזמן את מי שאתה דואג לו ושתף היסטוריה מלאה בזמן אמת — ב-iPhone, ב-iPad וב-Mac, בעברית או באנגלית.',
 
   // Plans
   subsEyebrow: 'מסלולים',
@@ -292,7 +292,7 @@ const he: Dict = {
   closingTitleA: 'שמרו את בריאות כולם',
   closingEm: 'קרוב.',
   closingSub:
-    'מעגל פרטי אחד לרשומות שהכי חשובות. חינם להתחלה — ב-iPhone וב-Mac.',
+    'מעגל פרטי אחד לרשומות שהכי חשובות. חינם להתחלה — ב-iPhone, ב-iPad וב-Mac.',
 
   // Footer
   footerTagline:
